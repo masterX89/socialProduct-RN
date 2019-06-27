@@ -1,0 +1,9 @@
+{
+  "presets": ["react-native"],
+  "plugins": [["@babel/plugin-proposal-decorators", { "legacy": true }]],
+  "env": {
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  }
+}
