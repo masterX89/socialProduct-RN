@@ -569,7 +569,7 @@ export default class MyTasksView extends LoggedView {
 						animationType="slide-up"
 					>
 						<WebView
-							source={ { uri: 'http://webviewer.arcplus-99.com:3010/samples/viewing/viewing/index.html?key=demo:601439739@qq.com:743d76bd0107bdda259b1ca19b0cb79456070bb2f0c4d57a89&url=http://teamcore.arcplus-99.com:7087/fileManager/download?id=37e70b64-adeb-4101-b029-cb993ebf3908;1.0&isWopi=false&name=本次系统更新内容.docx' } }
+							source={ { uri: `${ PDFTRON_HOST }/samples/viewing/viewing/index.html?key=demo:601439739@qq.com:743d76bd0107bdda259b1ca19b0cb79456070bb2f0c4d57a89&url=http://teamcore.arcplus-99.com:7087/fileManager/download?id=37e70b64-adeb-4101-b029-cb993ebf3908;1.0&isWopi=false&name=本次系统更新内容.docx` } }
 							// source={ { uri: 'http://www.jianshu.com/u/d5b531888b2b' } }
 							style={ {
 								width: '100%',
