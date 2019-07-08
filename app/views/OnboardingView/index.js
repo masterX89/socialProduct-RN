@@ -33,7 +33,7 @@ export default class OnboardingView extends LoggedView {
 			screen: 'NewServerView',
 			backButtonTitle: '',
 			passProps: {
-				server: 'https://open.rocket.chat'
+				server: 'http://172.16.0.145:3000'
 			},
 			navigatorStyle: {
 				navBarHidden: true
@@ -50,7 +50,6 @@ export default class OnboardingView extends LoggedView {
 			<SafeAreaView style={styles.container} testID='onboarding-view'>
 				<Image style={styles.onboarding} source={require('../../static/images/onboarding.png')} />
 				<Text style={styles.title}>{I18n.t('Welcome_to_RocketChat')}</Text>
-				<Text style={styles.subtitle}>{I18n.t('Open_Source_Communication')}</Text>
 				<View style={styles.buttonsContainer}>
 					<Button
 						type='secondary'
@@ -62,18 +61,18 @@ export default class OnboardingView extends LoggedView {
 					<Button
 						type='secondary'
 						title={I18n.t('Join_the_community')}
-						subtitle='open.rocket.chat'
+						subtitle='互联华建'
 						icon={<Image source={require('../../static/images/logoSmall.png')} />}
 						onPress={this.joinCommunity}
 						testID='join-community-button'
 					/>
-					<Button
+					{/* <Button
 						type='primary'
 						title={I18n.t('Create_a_new_workspace')}
 						icon={<Image source={require('../../static/images/plusWhite.png')} />}
 						onPress={this.createWorkspace}
 						testID='create-workspace-button'
-					/>
+					/> */ }
 				</View>
 			</SafeAreaView>
 		);

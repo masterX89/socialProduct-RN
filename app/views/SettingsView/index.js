@@ -34,8 +34,11 @@ export default class SettingsView extends LoggedView {
 		super('SettingsView', props);
 		this.state = {
 			placeholder: {},
-			language: props.userLanguage ? props.userLanguage : 'en',
+			language: props.userLanguage ? props.userLanguage : 'zh',
 			languages: [{
+				label: '简体中文',
+				value: 'zh'
+			}, {
 				label: 'English',
 				value: 'en'
 			}, {
