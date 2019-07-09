@@ -107,7 +107,7 @@ export default class LoginView extends LoggedView {
 			>
 				<ScrollView {...scrollPersistTaps} contentContainerStyle={styles.containerScrollView}>
 					<SafeAreaView style={styles.container} testID='login-view'>
-						<Text style={[styles.loginText, styles.loginTitle]}>Login</Text>
+						<Text style={[styles.loginText, styles.loginTitle]}>登陆</Text>
 						<TextInput
 							label={I18n.t('Username')}
 							placeholder={this.props.Accounts_EmailOrUsernamePlaceholder || I18n.t('Username')}
@@ -140,14 +140,14 @@ export default class LoginView extends LoggedView {
 								onPress={this.submit}
 								testID='login-view-submit'
 							/>
-							<Text
+							{/* <Text
 								style={[styles.loginText, { marginTop: 10 }]}
 								testID='login-view-register'
 								onPress={() => this.register()}
 							>{I18n.t('New_in_RocketChat_question_mark')} &nbsp;
 								<Text style={{ color: COLOR_BUTTON_PRIMARY }}>{I18n.t('Sign_Up')}
 								</Text>
-							</Text>
+							</Text> */ }
 							<Text
 								style={[styles.loginText, { marginTop: 20, fontSize: 13 }]}
 								onPress={() => this.forgotPassword()}

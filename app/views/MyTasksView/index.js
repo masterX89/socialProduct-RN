@@ -13,7 +13,7 @@ import log from '../../utils/log';
 import I18n from '../../i18n';
 import Avatar from '../../containers/Avatar';
 import styles from '../../containers/message/styles';
-import {TEAM_CORE_HOST, FLOW_CORE_HOST, PDFTRON_HOST} from '../Constants/Constants';
+import { TEAM_CORE_HOST, FLOW_CORE_HOST, PDFTRON_HOST, PDF_KEY } from '../Constants/Constants';
 
 const district = [{ value: '同意', label: '同意' }, { value: '拒绝', label: '拒绝' }];
 
@@ -77,7 +77,9 @@ export default class MyTasksView extends LoggedView {
 			mockData: [],
 			checkboxItem1: true,
 			rejectIds: [],
-			showGraphPreview: false
+			showGraphPreview: false,
+			currentGraph: {},
+			currentGraphPreviewUrl: ''
 		};
 		props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 	}
@@ -476,9 +478,45 @@ export default class MyTasksView extends LoggedView {
 
 	showGraphPreviewModal() {
 		const self = this;
-		self.setState({
-			showGraphPreview: true
-		});
+		fetch(`${ TEAM_CORE_HOST }/majorPlanning/getById?id=${ parseInt(self.state.currentGraph.key) }`, {
+			method: 'GET',
+			headers: {
+				'Auth-Token': this.props.user.token,
+				'Auth-uid': this.props.user.id
+			}
+		})
+			.then(data => data.json())
+			.then((data2) => {
+				const dataContent = data2.content;
+				let flow = 'design';
+				let dirId = '';
+				let filePath = dataContent.signFilePath;
+				let newFilePath = filePath.replace(/\//g, '@!!@');
+				newFilePath = newFilePath.replace(/\+/g, '@!_!@');
+				newFilePath = newFilePath.replace(/&/g, '@!__!@');
+				let majorId = dataContent.majorId;
+				let projectId = dataContent.projectId;
+				fetch(`${ TEAM_CORE_HOST }/majorDetail/getByIdForPreview?id=${ majorId }`, {
+					method: 'GET',
+					headers: {
+						'Auth-Token': this.props.user.token,
+						'Auth-uid': this.props.user.id
+					}
+				})
+					.then(data => data.json())
+					.then((majorData) => {
+						console.log('majorData', majorData);
+						dirId = majorData.content.gitlabId;
+						const pdfUrl = `${ PDFTRON_HOST }/samples/viewing/viewing/index.html?key=${ PDF_KEY }&url=${ TEAM_CORE_HOST }/wopi/files/${ dirId }/${ flow }/${ newFilePath }/${ majorId }/contents`;
+						console.log('pdfUrl', pdfUrl);
+						self.setState({
+							showGraphPreview: true,
+							// currentGraphPreviewUrl: `${ PDFTRON_HOST }/samples/viewing/viewing/index.html?key=demo:601439739@qq.com:743d76bd0107bdda259b1ca19b0cb79456070bb2f0c4d57a89&url=http://teamcore.arcplus-99.com:7087/fileManager/download?id=37e70b64-adeb-4101-b029-cb993ebf3908;1.0&isWopi=false&name=本次系统更新内容.docx`
+							currentGraphPreviewUrl: pdfUrl
+						});
+					});
+			});
+
 	}
 
 	closeGraphPreviewModal() {
@@ -541,7 +579,12 @@ export default class MyTasksView extends LoggedView {
 										>
 											<Text style={ { fontSize: 17 } }>{ item.title }</Text>
 										</Checkbox.CheckboxItem>
-										<Button type='ghost' onPress={this.showGraphPreviewModal.bind(this)}>预览</Button>
+									<Button type='ghost' onPress={ () => {
+										self.setState({ currentGraph: item }, () => {
+											console.log(self.state.currentGraph);
+											self.showGraphPreviewModal();
+										});
+									} }>预览</Button>
 									</List.Item>)}
 								keyExtractor={(item, index) => item.id}
 							/>
@@ -569,8 +612,7 @@ export default class MyTasksView extends LoggedView {
 						animationType="slide-up"
 					>
 						<WebView
-							source={ { uri: `${ PDFTRON_HOST }/samples/viewing/viewing/index.html?key=demo:601439739@qq.com:743d76bd0107bdda259b1ca19b0cb79456070bb2f0c4d57a89&url=http://teamcore.arcplus-99.com:7087/fileManager/download?id=37e70b64-adeb-4101-b029-cb993ebf3908;1.0&isWopi=false&name=本次系统更新内容.docx` } }
-							// source={ { uri: 'http://www.jianshu.com/u/d5b531888b2b' } }
+							source={ { uri: self.state.currentGraphPreviewUrl } }
 							style={ {
 								width: '100%',
 								height: 600
@@ -1137,7 +1179,6 @@ export default class MyTasksView extends LoggedView {
 					backgroundColor: 'white'
 				}}
 				>
-					<Text style={{ margin: 10 }}>{ pageText }</Text>
 					<View style={{
 						marginTop: 0,
 						marginBottom: 0

@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const defaultServer = 'https://open.rocket.chat';
+const defaultServer = 'http://172.16.0.145:3000';
 
 @connect(state => ({
 	connecting: state.server.connecting,
