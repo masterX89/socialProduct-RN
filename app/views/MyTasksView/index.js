@@ -301,7 +301,7 @@ export default class MyTasksView extends LoggedView {
 				'Auth-uid': this.props.user.id
 			}
 		}).then(data => data.json()).then((data) => {
-			console.log(data);
+			console.log('data：', data);
 			if (data.success) {
 				for (let i = 0; i < data.content.length; i++) {
 					temp.push(data.content[i]);
@@ -478,7 +478,7 @@ export default class MyTasksView extends LoggedView {
 
 	showGraphPreviewModal() {
 		const self = this;
-		fetch(`${ TEAM_CORE_HOST }/majorPlanning/getById?id=${ parseInt(self.state.currentGraph.key) }`, {
+		fetch(`${ TEAM_CORE_HOST }/majorPlanning/getById?id=${ parseInt(self.state.currentGraph.key.id) }`, {
 			method: 'GET',
 			headers: {
 				'Auth-Token': this.props.user.token,
@@ -577,7 +577,7 @@ export default class MyTasksView extends LoggedView {
 												self.setState({ checkboxItem1: event.target.checked });
 											} }
 										>
-											<Text style={ { fontSize: 17 } }>{ item.title }</Text>
+											<Text style={ { fontSize: 17 } }>{ item.key.name }</Text>
 										</Checkbox.CheckboxItem>
 									<Button type='ghost' onPress={ () => {
 										self.setState({ currentGraph: item }, () => {

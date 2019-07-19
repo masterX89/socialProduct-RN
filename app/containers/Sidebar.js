@@ -262,7 +262,7 @@ export default class Sidebar extends Component {
 			}),
 			this.renderItem({
 				text: I18n.t('myTasks'),
-				left: <Icon name='person' size={20} />,
+				left: <Icon name='event' size={20} />,
 				onPress: () => this.sidebarNavigate('MyTasksView', I18n.t('MyTasks')),
 				testID: 'sidebar-myTasks'
 			}),
