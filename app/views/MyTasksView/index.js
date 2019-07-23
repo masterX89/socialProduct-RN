@@ -14,6 +14,7 @@ import I18n from '../../i18n';
 import Avatar from '../../containers/Avatar';
 import styles from '../../containers/message/styles';
 import { TEAM_CORE_HOST, FLOW_CORE_HOST, PDFTRON_HOST, PDF_KEY } from '../Constants/Constants';
+import FlatListInTasks from './util/FlatListInTasks';
 
 const district = [{ value: '同意', label: '同意' }, { value: '拒绝', label: '拒绝' }];
 
@@ -526,6 +527,14 @@ export default class MyTasksView extends LoggedView {
 		});
 	}
 
+	initialActiveSections() {
+		this.setState({
+			activeSections: []
+		}, () => {
+			console.log('测试调用父组件', this.state.activeSections);
+		});
+	}
+
 	renderContent(pageText: any) {
 		const self = this;
 		const projectPanelStyle = {
@@ -677,11 +686,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text
-													style={{ fontSize: 17 }}
-												>进入
-												</Text>
-												</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
@@ -736,11 +740,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text*/}
-												{/*	style={{ fontSize: 17 }}*/}
-												{/*>进入*/}
-												{/*</Text>*/}
-												{/*</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
@@ -787,11 +786,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text*/}
-												{/*	style={{ fontSize: 17 }}*/}
-												{/*>进入*/}
-												{/*</Text>*/}
-												{/*</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
@@ -838,11 +832,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text*/}
-												{/*	style={{ fontSize: 17 }}*/}
-												{/*>进入*/}
-												{/*</Text>*/}
-												{/*</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
@@ -889,11 +878,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text*/}
-												{/*	style={{ fontSize: 17 }}*/}
-												{/*>进入*/}
-												{/*</Text>*/}
-												{/*</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
@@ -940,11 +924,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text*/}
-												{/*	style={{ fontSize: 17 }}*/}
-												{/*>进入*/}
-												{/*</Text>*/}
-												{/*</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
@@ -962,6 +941,11 @@ export default class MyTasksView extends LoggedView {
 										</List.Item>)}
 										keyExtractor={(item, index) => item.id}
 									/>
+									{/*<FlatListInTasks listData={ this.state.checkerList } initialActiveSections={ () => {
+										this.initialActiveSections();
+									} } listQuery={ () => {
+										this.listQuery();
+									} }/>*/}
 								</Accordion.Panel>
 								<Accordion.Panel
 									header={`图纸审定审批【${ _.size(self.state.deciderList) }】`}
@@ -991,11 +975,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text*/}
-												{/*	style={{ fontSize: 17 }}*/}
-												{/*>进入*/}
-												{/*</Text>*/}
-												{/*</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
@@ -1042,11 +1021,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text*/}
-												{/*	style={{ fontSize: 17 }}*/}
-												{/*>进入*/}
-												{/*</Text>*/}
-												{/*</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
@@ -1093,11 +1067,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text*/}
-												{/*	style={{ fontSize: 17 }}*/}
-												{/*>进入*/}
-												{/*</Text>*/}
-												{/*</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
@@ -1144,11 +1113,6 @@ export default class MyTasksView extends LoggedView {
 													alignItems: 'center'
 												}}
 											>
-												{/*<Button type='ghost' size='small' disabled><Text*/}
-												{/*	style={{ fontSize: 17 }}*/}
-												{/*>进入*/}
-												{/*</Text>*/}
-												{/*</Button>*/}
 												<Button type='ghost' size='small' disabled><Text
 													style={{ fontSize: 17 }}
 												>查看
