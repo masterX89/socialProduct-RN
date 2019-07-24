@@ -8,7 +8,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 // react-native UI
-import { Text, ScrollView, FlatList } from 'react-native';
+import { Text, ScrollView, FlatList, Dimensions } from 'react-native';
 // antd UI
 import { Button, List, WingBlank } from '@ant-design/react-native';
 import Avatar from '../../../../containers/Avatar';
@@ -115,9 +115,12 @@ export default class ProjectApplyList extends React.PureComponent {
 	}
 
 	render() {
+		let { height } = Dimensions.get('window');
 		const { nowTasks } = this.state;
 		return (
-			<ScrollView style={ (nowTasks.length > 0 ? ({ height: 450 }) : null) }>
+			<ScrollView style={ (nowTasks.length > 0 ? ({
+				height: height * 0.65
+			}) : null) }>
 				<FlatList
 					data={ nowTasks }
 					keyExtractor={ (item, index) => item.id }

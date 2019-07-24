@@ -148,21 +148,21 @@ export default class RoomsListView extends LoggedView {
 	}
 
 	componentWillUnmount() {
-		this.removeListener(this.data);
-		this.removeListener(this.unread);
-		this.removeListener(this.favorites);
-		this.removeListener(this.channels);
-		this.removeListener(this.privateGroup);
-		this.removeListener(this.direct);
-		this.removeListener(this.livechat);
-
-		if (database && database.deleteAll) {
-			database.deleteAll();
-		}
-
-		if (this.timeout) {
-			clearTimeout(this.timeout);
-		}
+		// this.removeListener(this.data);
+		// this.removeListener(this.unread);
+		// this.removeListener(this.favorites);
+		// this.removeListener(this.channels);
+		// this.removeListener(this.privateGroup);
+		// this.removeListener(this.direct);
+		// this.removeListener(this.livechat);
+		//
+		// if (database && database.deleteAll) {
+		// 	database.deleteAll();
+		// }
+		//
+		// if (this.timeout) {
+		// 	clearTimeout(this.timeout);
+		// }
 	}
 
 	onNavigatorEvent(event) {

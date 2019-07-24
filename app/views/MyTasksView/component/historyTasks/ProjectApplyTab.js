@@ -36,25 +36,29 @@ export default class ProjectApplyTab extends React.PureComponent {
 	};
 
 	render() {
+		const activeSection = this.state.activeSections[0];
 		return (
 			<View>
 				<Accordion onChange={ this.onChange } activeSections={ this.state.activeSections }>
 					<Accordion.Panel
 						header={ `部门领导` }
+						style={ ((activeSection === undefined || activeSection === 0) ? null : { display: 'none' }) }
 					>
-						{ this.state.activeSections[0] === 0 ? (
+						{ activeSection === 0 ? (
 							<ProjectApplyList activeSection={ '部门领导' }/>) : null }
 					</Accordion.Panel>
 					<Accordion.Panel
 						header={ `知识管理` }
+						style={ ((activeSection === undefined || activeSection === 1) ? null : { display: 'none' }) }
 					>
-						{ this.state.activeSections[0] === 1 ? (
+						{ activeSection === 1 ? (
 							<ProjectApplyList activeSection={ '知识管理' }/>) : null }
 					</Accordion.Panel>
 					<Accordion.Panel
 						header={ `IT管理` }
+						style={ ((activeSection === undefined || activeSection === 2) ? null : { display: 'none' }) }
 					>
-						{ this.state.activeSections[0] === 2 ? (
+						{ activeSection === 2 ? (
 							<ProjectApplyList activeSection={ 'IT管理' }/>) : null }
 					</Accordion.Panel>
 				</Accordion>
