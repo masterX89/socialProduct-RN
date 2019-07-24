@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FLOW_CORE_HOST } from '../../../Constants/Constants';
+import moment from 'moment';
 
 import _ from 'lodash';
 
@@ -18,9 +19,9 @@ const wingBlankTitleStyle = {
 	alignItems: 'center'
 };
 const wingBlankButtonStyle = {
-	flexDirection: 'column',
+	flexDirection: 'row',
 	justifyContent: 'space-between',
-	alignItems: 'flex-end'
+	alignItems: 'center'
 };
 
 @connect(state => ({
@@ -135,6 +136,8 @@ export default class ProjectApplyList extends React.PureComponent {
 								} }>{ item.activityName }</Text></Text>
 							</WingBlank>
 							<WingBlank style={ { ...wingBlankButtonStyle } }>
+								<Text style={ { color: '#808080' } }>{ moment(new Date(item.endTime))
+									.format('YYYY-MM-DD HH:mm') }</Text>
 								<Button type='ghost' size='small' disabled>
 									<Text style={ { fontSize: 17 } }>查看</Text>
 								</Button>
