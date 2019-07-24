@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // component
-import GraphModal from '../component/GraphModal';
+import GraphModal from './GraphModal';
 
 // react-native UI
 import { Text, FlatList, ScrollView } from 'react-native';
@@ -63,7 +63,7 @@ export default class FlatListInTasks extends React.PureComponent {
 							</WingBlank>
 							<WingBlank style={ { ...wingBlankButtonStyle } }>
 								<Button type='ghost' size='small' disabled>
-									<Text style={ { fontSize: 17 } }>进入</Text>
+									<Text style={ { fontSize: 17 } }>查看</Text>
 								</Button>
 								<GraphModal record={ item } { ...this.props }/>
 							</WingBlank>

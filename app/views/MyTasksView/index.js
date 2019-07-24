@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import SHA256 from 'js-sha256';
 import _ from 'lodash';
 
+// pages
+import HistoryTasksTab from './pages/HistoryTasksTab';
+
 import { Button, Provider, List, Accordion, Tabs, TabBar, Icon, WingBlank, Picker, Toast, Modal, Checkbox } from '@ant-design/react-native';
 import LoggedView from '../View';
 import { showErrorAlert, showToast } from '../../utils/info';
@@ -14,7 +17,7 @@ import I18n from '../../i18n';
 import Avatar from '../../containers/Avatar';
 import styles from '../../containers/message/styles';
 import { TEAM_CORE_HOST, FLOW_CORE_HOST, PDFTRON_HOST, PDF_KEY } from '../Constants/Constants';
-import FlatListInTasks from './util/FlatListInTasks';
+import FlatListInTasks from './component/FlatListInTasks';
 
 const district = [{ value: '同意', label: '同意' }, { value: '拒绝', label: '拒绝' }];
 
@@ -1138,31 +1141,7 @@ export default class MyTasksView extends LoggedView {
 			);
 		} else if (pageText === 'historyTab') {
 			return (
-				<ScrollView style={{
-					flex: 1,
-					backgroundColor: 'white'
-				}}
-				>
-					<View style={{
-						marginTop: 0,
-						marginBottom: 0
-					}}
-					>
-						<FlatList
-							data={this.state.flowList}
-							renderItem={({ item }) => (<List.Item
-								wrap
-							>{ `${ item.title }/${ item.activityName }` }
-                                  </List.Item>)}
-							keyExtractor={(item, index) => item.id}
-						/>
-					</View>
-					<Button onPress={() => {
-						self.listQuery();
-					}}
-					>加载更多
-					</Button>
-				</ScrollView>
+				<HistoryTasksTab />
 			);
 		}
 	}
