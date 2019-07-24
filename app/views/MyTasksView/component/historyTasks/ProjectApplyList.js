@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { FLOW_CORE_HOST } from '../../Constants/Constants';
+import { FLOW_CORE_HOST } from '../../../Constants/Constants';
 
 import _ from 'lodash';
 
@@ -10,8 +10,8 @@ import _ from 'lodash';
 import { Text, ScrollView, FlatList } from 'react-native';
 // antd UI
 import { Button, List, WingBlank } from '@ant-design/react-native';
-import Avatar from '../../../containers/Avatar';
-import styles from '../../../containers/message/styles';
+import Avatar from '../../../../containers/Avatar';
+import styles from '../../../../containers/message/styles';
 
 const wingBlankTitleStyle = {
 	flexDirection: 'row',

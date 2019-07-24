@@ -7,7 +7,8 @@ import PropTypes from 'prop-types';
 import { Text, View } from 'react-native';
 // antd UI
 import { Tabs } from '@ant-design/react-native';
-import ProjectApplyTab from '../component/ProjectApplyTab';
+import ProjectApplyTab from '../component/historyTasks/ProjectApplyTab';
+import GraphApprovalTab from '../component/historyTasks/GraphApprovalTab';
 
 @connect(state => ({
 	user: {
@@ -27,18 +28,10 @@ export default class HistoryTasksTab extends React.PureComponent {
 			{ title: '立项审批' },
 			{ title: '图纸审批' }
 		];
-		const style = {
-			alignItems: 'center',
-			justifyContent: 'center',
-			height: 150,
-			backgroundColor: '#fff'
-		};
 		return (
 			<Tabs tabs={ tabs }>
 				<ProjectApplyTab/>
-				<View style={ style }>
-					<Text>Content of Second Tab</Text>
-				</View>
+				<GraphApprovalTab/>
 			</Tabs>
 		);
 	}
