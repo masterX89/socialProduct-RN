@@ -7,6 +7,8 @@ import _ from 'lodash';
 
 // pages
 import HistoryTasksTab from './pages/HistoryTasksTab';
+import MyApplyTasksTab from './pages/MyApplyTasksTab';
+import FlatListInTasks from './component/FlatListInTasks';
 
 import { Button, Provider, List, Accordion, Tabs, TabBar, Icon, WingBlank, Picker, Toast, Modal, Checkbox } from '@ant-design/react-native';
 import LoggedView from '../View';
@@ -17,7 +19,6 @@ import I18n from '../../i18n';
 import Avatar from '../../containers/Avatar';
 import styles from '../../containers/message/styles';
 import { TEAM_CORE_HOST, FLOW_CORE_HOST, PDFTRON_HOST, PDF_KEY } from '../Constants/Constants';
-import FlatListInTasks from './component/FlatListInTasks';
 
 const district = [{ value: '同意', label: '同意' }, { value: '拒绝', label: '拒绝' }];
 
@@ -1142,6 +1143,10 @@ export default class MyTasksView extends LoggedView {
 		} else if (pageText === 'historyTab') {
 			return (
 				<HistoryTasksTab />
+			);
+		} else if (pageText === 'myApplyTab') {
+			return (
+				<MyApplyTasksTab />
 			);
 		}
 	}

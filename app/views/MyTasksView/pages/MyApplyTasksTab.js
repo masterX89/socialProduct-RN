@@ -3,10 +3,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+// component
+import MyApplyTasksList from '../component/myApplyTasks/MyApplyTasksList';
+
 // antd UI
 import { Tabs } from '@ant-design/react-native';
-import ProjectApplyTab from '../component/historyTasks/ProjectApplyTab';
-import GraphApprovalTab from '../component/historyTasks/GraphApprovalTab';
+import ProjectApplyList from '../component/historyTasks/ProjectApplyList';
 
 @connect(state => ({
 	user: {
@@ -16,7 +18,7 @@ import GraphApprovalTab from '../component/historyTasks/GraphApprovalTab';
 		id: state.login.user && state.login.user.id
 	}
 }))
-export default class HistoryTasksTab extends React.PureComponent {
+export default class MyApplyTasksTab extends React.PureComponent {
 	static propTypes = {
 		user: PropTypes.object
 	};
@@ -28,8 +30,8 @@ export default class HistoryTasksTab extends React.PureComponent {
 		];
 		return (
 			<Tabs tabs={ tabs }>
-				<ProjectApplyTab/>
-				<GraphApprovalTab/>
+				<MyApplyTasksList activeSection={ '项目申请_创建人' }/>
+				<MyApplyTasksList activeSection={ '图纸审批申请_创建人' }/>
 			</Tabs>
 		);
 	}
