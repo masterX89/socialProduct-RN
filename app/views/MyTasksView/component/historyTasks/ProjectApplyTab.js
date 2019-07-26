@@ -45,21 +45,21 @@ export default class ProjectApplyTab extends React.PureComponent {
 						style={ ((activeSection === undefined || activeSection === 0) ? null : { display: 'none' }) }
 					>
 						{ activeSection === 0 ? (
-							<ProjectApplyList activeSection={ '部门领导' }/>) : null }
+							<ProjectApplyList activeSection={ '部门领导' } tab={this.props.tab}/>) : null }
 					</Accordion.Panel>
 					<Accordion.Panel
 						header={ `知识管理` }
 						style={ ((activeSection === undefined || activeSection === 1) ? null : { display: 'none' }) }
 					>
 						{ activeSection === 1 ? (
-							<ProjectApplyList activeSection={ '知识管理' }/>) : null }
+							<ProjectApplyList activeSection={ '知识管理' } tab={this.props.tab}/>) : null }
 					</Accordion.Panel>
 					<Accordion.Panel
 						header={ `IT管理` }
 						style={ ((activeSection === undefined || activeSection === 2) ? null : { display: 'none' }) }
 					>
 						{ activeSection === 2 ? (
-							<ProjectApplyList activeSection={ 'IT管理' }/>) : null }
+							<ProjectApplyList activeSection={ 'IT管理' } tab={this.props.tab}/>) : null }
 					</Accordion.Panel>
 				</Accordion>
 			</View>

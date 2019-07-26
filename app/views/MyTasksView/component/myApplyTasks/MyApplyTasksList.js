@@ -141,9 +141,6 @@ export default class MyApplyTasksList extends React.PureComponent {
 							<WingBlank style={ { ...wingBlankButtonStyle } }>
 								<Text style={ { color: '#808080' } }>{ moment(new Date(item.endTime))
 									.format('YYYY-MM-DD HH:mm') }</Text>
-								<Button type='ghost' size='small' disabled>
-									<Text style={ { fontSize: 17 } }>查看</Text>
-								</Button>
 							</WingBlank>
 						</List.Item>
 					) }

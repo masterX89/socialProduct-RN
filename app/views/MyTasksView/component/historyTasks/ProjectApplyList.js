@@ -7,6 +7,9 @@ import moment from 'moment';
 
 import _ from 'lodash';
 
+// utils
+import FlowPanel from '../../utils/FlowPanel';
+
 // react-native UI
 import { Text, ScrollView, FlatList, Dimensions } from 'react-native';
 // antd UI
@@ -43,7 +46,41 @@ export default class ProjectApplyList extends React.PureComponent {
 		this.state = {
 			pageSize: 10,
 			offset: 1,
-			nowTasks: []
+			nowTasks: [],
+			projectTaskTemplate: [{
+				activityName: '项目申请审批'
+			}, {
+				activityName: '部门领导'
+			}, {
+				activityName: '知识管理'
+			}, {
+				activityName: 'IT管理'
+			}, {
+				activityName: '结束'
+			}],
+			graphTaskTemplate: [{
+				activityName: '图纸申请审批'
+			}, {
+				activityName: '设计'
+			}, {
+				activityName: '校对'
+			}, {
+				activityName: '专业负责人'
+			}, {
+				activityName: '会签'
+			}, {
+				activityName: '审核'
+			}, {
+				activityName: '审定'
+			}, {
+				activityName: '设总'
+			}, {
+				activityName: '项目经理'
+			}, {
+				activityName: '档案审批人'
+			}, {
+				activityName: '结束'
+			}]
 		};
 	}
 
@@ -103,8 +140,6 @@ export default class ProjectApplyList extends React.PureComponent {
 		this.setState({
 			nowTasks: this.state.nowTasks.concat(finalTasks),
 			offset: this.state.pageSize + this.state.offset
-		}, () => {
-			console.log(this.state.nowTasks);
 		});
 	}
 
@@ -141,9 +176,15 @@ export default class ProjectApplyList extends React.PureComponent {
 							<WingBlank style={ { ...wingBlankButtonStyle } }>
 								<Text style={ { color: '#808080' } }>{ moment(new Date(item.endTime))
 									.format('YYYY-MM-DD HH:mm') }</Text>
-								<Button type='ghost' size='small' disabled>
-									<Text style={ { fontSize: 17 } }>查看</Text>
-								</Button>
+								{/*{ this.props.tab === 'GraphApprovalTab' ? (<Button type='ghost' size='small' disabled>*/}
+								{/*	<Text style={ { fontSize: 17 } }>查看</Text>*/}
+								{/*</Button>) : null }*/}
+								{ this.props.tab === 'GraphApprovalTab' ?
+									<FlowPanel processId={ item.processInstanceId }
+									           template={ this.state.graphTaskTemplate }/> : null }
+								{ this.props.tab === 'ProjectApplyTab' ?
+									<FlowPanel processId={ item.processInstanceId }
+									           template={ this.state.projectTaskTemplate }/> : null }
 							</WingBlank>
 						</List.Item>
 					) }

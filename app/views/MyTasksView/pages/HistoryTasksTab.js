@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // antd UI
-import { Tabs } from '@ant-design/react-native';
+import { Tabs, Provider } from '@ant-design/react-native';
 import ProjectApplyTab from '../component/historyTasks/ProjectApplyTab';
 import GraphApprovalTab from '../component/historyTasks/GraphApprovalTab';
 
@@ -27,10 +27,12 @@ export default class HistoryTasksTab extends React.PureComponent {
 			{ title: '图纸审批' }
 		];
 		return (
-			<Tabs tabs={ tabs }>
-				<ProjectApplyTab/>
-				<GraphApprovalTab/>
-			</Tabs>
+			<Provider>
+				<Tabs tabs={ tabs }>
+					<ProjectApplyTab tab={'ProjectApplyTab'}/>
+					<GraphApprovalTab tab={'GraphApprovalTab'}/>
+				</Tabs>
+			</Provider>
 		);
 	}
 }
