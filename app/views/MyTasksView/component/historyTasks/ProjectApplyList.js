@@ -11,7 +11,7 @@ import _ from 'lodash';
 import FlowPanel from '../../utils/FlowPanel';
 
 // react-native UI
-import { Text, ScrollView, FlatList, Dimensions } from 'react-native';
+import { Text, ScrollView, FlatList, Dimensions, View } from 'react-native';
 // antd UI
 import { Button, List, WingBlank } from '@ant-design/react-native';
 import Avatar from '../../../../containers/Avatar';
@@ -47,6 +47,7 @@ export default class ProjectApplyList extends React.PureComponent {
 			pageSize: 10,
 			offset: 1,
 			nowTasks: [],
+			loadingMore: true,
 			projectTaskTemplate: [{
 				activityName: '项目申请审批'
 			}, {
@@ -85,62 +86,67 @@ export default class ProjectApplyList extends React.PureComponent {
 	}
 
 	async getMockData(activeSection) {
-		// 获取当前activeSection的tasks
-		let tasksUrl = `${ FLOW_CORE_HOST }/flow/projectApply/historyByAssigneeAndActivityNameList?assignee=${ this.props.user.name }(${ this.props.user.username })`;
-		tasksUrl += `&activityNameListString=${ activeSection }`;
-		tasksUrl += `&pageSize=${ this.state.pageSize }`;
-		tasksUrl += `&pageNum=${ this.state.offset }`;
-		const tasks = await fetch(tasksUrl, {
-			method: 'GET',
-			headers: {
-				'Auth-Token': this.props.user.token,
-				'Auth-uid': this.props.user.id
-			}
-		})
-			.then(data => data.json())
-			.then(data => {
-				if (data.success) {
-					return data.content;
-				} else {
+		if (this.state.loadingMore) {
+			// 获取当前activeSection的tasks
+			let tasksUrl = `${ FLOW_CORE_HOST }/flow/projectApply/historyByAssigneeAndActivityNameList?assignee=${ this.props.user.name }(${ this.props.user.username })`;
+			tasksUrl += `&activityNameListString=${ activeSection }`;
+			tasksUrl += `&pageSize=${ this.state.pageSize }`;
+			tasksUrl += `&pageNum=${ this.state.offset }`;
+			const tasks = await fetch(tasksUrl, {
+				method: 'GET',
+				headers: {
+					'Auth-Token': this.props.user.token,
+					'Auth-uid': this.props.user.id
+				}
+			})
+				.then(data => data.json())
+				.then(data => {
+					if (data.success) {
+						if (data.content.length === 0) {
+							this.setState({ loadingMore: false });
+						}
+						return data.content;
+					} else {
+						return [];
+					}
+				})
+				.catch(err => console.log(err));
+			//查询流程ID对应的辅助流程信息，如标题，说明等
+			let url = `${ FLOW_CORE_HOST }/projectAndProcess/getHistoryByFlowIds?`;
+			_.each(tasks, (one) => {
+				url += `flowIds%5B%5D=${ one.processInstanceId }&`;
+			});
+			url = url.slice(0, url.length - 1);
+			const taskInfos = await fetch(url, {
+				method: 'GET',
+				headers: {
+					'Auth-Token': this.props.user.token,
+					'Auth-uid': this.props.user.id
+				}
+			})
+				.then(data => data.json())
+				.then((data) => {
+					if (data.success) {
+						return data.content;
+					}
 					return [];
-				}
-			})
-			.catch(err => console.log(err));
-		//查询流程ID对应的辅助流程信息，如标题，说明等
-		let url = `${ FLOW_CORE_HOST }/projectAndProcess/getHistoryByFlowIds?`;
-		_.each(tasks, (one) => {
-			url += `flowIds%5B%5D=${ one.processInstanceId }&`;
-		});
-		url = url.slice(0, url.length - 1);
-		const taskInfos = await fetch(url, {
-			method: 'GET',
-			headers: {
-				'Auth-Token': this.props.user.token,
-				'Auth-uid': this.props.user.id
-			}
-		})
-			.then(data => data.json())
-			.then((data) => {
-				if (data.success) {
-					return data.content;
-				}
-				return [];
-			})
-			.catch(err => console.log(err));
-		// 组合finalTasks
-		const finalTasks = _.map(tasks, (item) => {
-			const info = _.find(taskInfos, { processId: item.processInstanceId });
-			return {
-				...item,
-				metaName: info.title,
-				metaId: info.externalIds,
-				metaMemo: info.memo
-			};
-		});
-		this.setState({
-			nowTasks: this.state.nowTasks.concat(finalTasks),
-			offset: this.state.pageSize + this.state.offset
-		});
+				})
+				.catch(err => console.log(err));
+			// 组合finalTasks
+			const finalTasks = _.map(tasks, (item) => {
+				const info = _.find(taskInfos, { processId: item.processInstanceId });
+				return {
+					...item,
+					metaName: info.title,
+					metaId: info.externalIds,
+					metaMemo: info.memo
+				};
+			});
+			this.setState({
+				nowTasks: this.state.nowTasks.concat(finalTasks),
+				offset: this.state.pageSize + this.state.offset
+			});
+		}
 	}
 
 	componentDidMount() {
@@ -176,9 +182,6 @@ export default class ProjectApplyList extends React.PureComponent {
 							<WingBlank style={ { ...wingBlankButtonStyle } }>
 								<Text style={ { color: '#808080' } }>{ moment(new Date(item.endTime))
 									.format('YYYY-MM-DD HH:mm') }</Text>
-								{/*{ this.props.tab === 'GraphApprovalTab' ? (<Button type='ghost' size='small' disabled>*/}
-								{/*	<Text style={ { fontSize: 17 } }>查看</Text>*/}
-								{/*</Button>) : null }*/}
 								{ this.props.tab === 'GraphApprovalTab' ?
 									<FlowPanel processId={ item.processInstanceId }
 									           template={ this.state.graphTaskTemplate }/> : null }
@@ -189,10 +192,12 @@ export default class ProjectApplyList extends React.PureComponent {
 						</List.Item>
 					) }
 				/>
-				<Button onPress={ () => {
-					this.getMockData(this.props.activeSection)
-						.catch(err => console.log(err));
-				} }>加载更多</Button>
+				<Button
+					disabled={ !this.state.loadingMore }
+					onPress={ () => {
+						this.getMockData(this.props.activeSection)
+							.catch(err => console.log(err));
+					} }>{ this.state.loadingMore ? '加载更多' : '加载完成' }</Button>
 			</ScrollView>
 		);
 	}

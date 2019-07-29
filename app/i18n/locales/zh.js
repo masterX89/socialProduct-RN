@@ -118,7 +118,7 @@ export default {
 	Close: '关闭',
 	Close_emoji_selector: '关闭表情选择器',
 	Choose: '选择',
-	Choose_from_library: '从图书馆挑选',
+	Choose_from_library: '本地',
 	Code: '代码',
 	Colaborative: '共同',
 	Connect: '连接',
