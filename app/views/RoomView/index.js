@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Text, View, LayoutAnimation, ActivityIndicator, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import equal from 'deep-equal';
-
+// ant UI
+import { Provider } from '@ant-design/react-native';
 import LoggedView from '../View';
 import { List } from './ListView';
 import { openRoom, closeRoom, setLastOpen } from '../../actions/room';
@@ -299,15 +300,17 @@ export default class RoomView extends LoggedView {
 
 	render() {
 		return (
-			<SafeAreaView style={styles.container} testID='room-view'>
-				{this.renderList()}
-				{this.state.room._id && this.props.showActions ?
-					<MessageActions room={this.state.room} user={this.props.user} /> :
-					null}
-				{this.props.showErrorActions ? <MessageErrorActions /> : null}
-				<ReactionPicker onEmojiSelected={this.onReactionPress} />
-				<UploadProgress rid={this.rid} />
-			</SafeAreaView>
+			<Provider>
+				<SafeAreaView style={styles.container} testID='room-view'>
+					{this.renderList()}
+					{this.state.room._id && this.props.showActions ?
+						<MessageActions room={this.state.room} user={this.props.user} /> :
+						null}
+					{this.props.showErrorActions ? <MessageErrorActions /> : null}
+					<ReactionPicker onEmojiSelected={this.onReactionPress} />
+					<UploadProgress rid={this.rid} />
+				</SafeAreaView>
+			</Provider>
 		);
 	}
 }

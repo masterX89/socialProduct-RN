@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { emojify } from 'react-emojione';
 import { KeyboardAccessoryView } from 'react-native-keyboard-input';
 import ImagePicker from 'react-native-image-crop-picker';
+// Myutils
+import { uploadImageFile } from './utils/FileUtils';
 
 import { userTyping } from '../../actions/room';
 import RocketChat from '../../lib/rocketchat';
@@ -40,6 +42,12 @@ const imagePickerConfig = {
 };
 
 @connect(state => ({
+	user: {
+		name: state.login.user && state.login.user.name,
+		username: state.login.user && state.login.user.username,
+		token: state.login.user && state.login.user.token,
+		id: state.login.user && state.login.user.id
+	},
 	roomType: state.room.t,
 	message: state.messages.message,
 	replyMessage: state.messages.replyMessage,
@@ -67,7 +75,8 @@ export default class MessageBox extends React.PureComponent {
 		editRequest: PropTypes.func.isRequired,
 		onSubmit: PropTypes.func.isRequired,
 		typing: PropTypes.func,
-		closeReply: PropTypes.func
+		closeReply: PropTypes.func,
+		user: PropTypes.object
 	}
 
 	constructor(props) {
@@ -213,7 +222,8 @@ export default class MessageBox extends React.PureComponent {
 			path: file.path
 		};
 		try {
-			await RocketChat.sendFileMessage(this.props.rid, fileInfo);
+			uploadImageFile(file, this.props.user, this.props.rid);
+			// await RocketChat.sendFileMessage(this.props.rid, fileInfo);
 		} catch (e) {
 			log('sendImageMessage', e);
 		}
