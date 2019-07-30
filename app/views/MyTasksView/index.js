@@ -18,7 +18,7 @@ import log from '../../utils/log';
 import I18n from '../../i18n';
 import Avatar from '../../containers/Avatar';
 import styles from '../../containers/message/styles';
-import { TEAM_CORE_HOST, FLOW_CORE_HOST, PDFTRON_HOST, PDF_KEY } from '../Constants/Constants';
+import { TEAM_CORE_HOST, FLOW_CORE_HOST, PDFTRON_HOST, PDF_KEY } from '../../constants/Constants';
 
 const district = [{ value: '同意', label: '同意' }, { value: '拒绝', label: '拒绝' }];
 

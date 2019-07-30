@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { FLOW_CORE_HOST } from '../../Constants/Constants';
+import { FLOW_CORE_HOST } from '../../../constants/Constants';
 import _ from 'lodash';
 
 // react-native UI
