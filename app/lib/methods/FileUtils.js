@@ -1,5 +1,5 @@
 import { Toast } from '@ant-design/react-native';
-import { TEAM_CORE_HOST } from '../../../constants/Constants';
+import { TEAM_CORE_HOST } from '../../constants/Constants';
 
 export function uploadImageFile(file, user, rid) {
 	const uploadFile = {
@@ -33,4 +33,22 @@ export function uploadImageFile(file, user, rid) {
 			console.log(err);
 			Toast.fail('文件上传失败', 1);
 		});
+}
+
+export function loadFiles(user, rid) {
+	return fetch(`${ TEAM_CORE_HOST }/fileManager/getGroupFileList?groupId=${ rid }`, {
+		method: 'GET',
+		headers: {
+			'Auth-Token': user.token,
+			'Auth-uid': user.id
+		}
+	})
+		.then(data => data.json())
+		.then((data) => {
+			if (data.success) {
+				return data.content;
+			}
+			return [];
+		})
+		.catch(err => console.log(err));
 }

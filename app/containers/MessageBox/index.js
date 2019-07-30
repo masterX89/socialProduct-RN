@@ -7,7 +7,7 @@ import { emojify } from 'react-emojione';
 import { KeyboardAccessoryView } from 'react-native-keyboard-input';
 import ImagePicker from 'react-native-image-crop-picker';
 // Myutils
-import { uploadImageFile } from './utils/FileUtils';
+import { uploadImageFile } from '../../lib/methods/FileUtils';
 
 import { userTyping } from '../../actions/room';
 import RocketChat from '../../lib/rocketchat';
