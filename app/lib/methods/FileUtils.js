@@ -1,12 +1,22 @@
+import { Platform } from 'react-native';
 import { Toast } from '@ant-design/react-native';
 import { TEAM_CORE_HOST } from '../../constants/Constants';
 
 export function uploadImageFile(file, user, rid) {
-	const uploadFile = {
-		uri: file.sourceURL,
-		type: file.mime,
-		name: file.filename
-	};
+	let uploadFile = { type: file.mime };
+	if (Platform.OS === 'android') {
+		uploadFile = {
+			...uploadFile,
+			uri: file.path,
+			name: file.name
+		};
+	} else if (Platform.OS === 'ios') {
+		uploadFile = {
+			...uploadFile,
+			uri: file.sourceURL,
+			name: file.filename
+		};
+	}
 	const formData = new FormData();
 	formData.append('file', uploadFile);
 	formData.append('fileName', file.filename);
