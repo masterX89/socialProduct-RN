@@ -57,7 +57,8 @@ export function loadFiles(user, rid) {
 		.then(data => data.json())
 		.then((data) => {
 			if (data.success) {
-				return data.content;
+				return _.sortBy(data.content, 'id')
+					.reverse();
 			}
 			return [];
 		})
