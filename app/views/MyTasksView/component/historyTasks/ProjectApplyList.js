@@ -157,7 +157,7 @@ export default class ProjectApplyList extends React.PureComponent {
 
 	render() {
 		let { height } = Dimensions.get('window');
-		const { nowTasks } = this.state;
+		const { nowTasks, loadingMore, graphTaskTemplate, projectTaskTemplate } = this.state;
 		return (
 			<ScrollView style={ (nowTasks.length > 0 ? ({
 				height: height * 0.65
@@ -184,20 +184,20 @@ export default class ProjectApplyList extends React.PureComponent {
 									.format('YYYY-MM-DD HH:mm') }</Text>
 								{ this.props.tab === 'GraphApprovalTab' ?
 									<FlowPanel processId={ item.processInstanceId }
-									           template={ this.state.graphTaskTemplate }/> : null }
+									           template={ graphTaskTemplate }/> : null }
 								{ this.props.tab === 'ProjectApplyTab' ?
 									<FlowPanel processId={ item.processInstanceId }
-									           template={ this.state.projectTaskTemplate }/> : null }
+									           template={ projectTaskTemplate }/> : null }
 							</WingBlank>
 						</List.Item>
 					) }
 				/>
 				<Button
-					disabled={ !this.state.loadingMore }
+					disabled={ !loadingMore }
 					onPress={ () => {
 						this.getMockData(this.props.activeSection)
 							.catch(err => console.log(err));
-					} }>{ this.state.loadingMore ? '加载更多' : '加载完成' }</Button>
+					} }>{ loadingMore ? '加载更多' : '加载完成' }</Button>
 			</ScrollView>
 		);
 	}

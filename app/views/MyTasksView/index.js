@@ -1389,7 +1389,7 @@ export default class MyTasksView extends LoggedView {
 				</TabBar.Item>
 				<TabBar.Item
 					icon={<Icon name='flag' />}
-					title='历史任务'
+					title='已发起流程'
 					selected={this.state.selectedTab === 'myApplyTab'}
 					onPress={() => this.onChangeTab('myApplyTab')}
 				>
