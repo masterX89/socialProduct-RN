@@ -1,21 +1,19 @@
 /* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, View, Text} from 'react-native';
+import { FlatList, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
-import {loadFiles} from '../../lib/methods/FileUtils';
+// antd UI
+import { Provider, ActivityIndicator } from '@ant-design/react-native';
+
+import { loadFiles } from '../../lib/methods/FileUtils';
 import FileItem from './Component/FileItem';
 
 import LoggedView from '../View';
 import { openRoomFiles, closeRoomFiles } from '../../actions/roomFiles';
 import styles from './styles';
-import Message from '../../containers/message';
-import RCActivityIndicator from '../../containers/ActivityIndicator';
 import I18n from '../../i18n';
-
-// antd UI
-import { Provider } from '@ant-design/react-native';
 
 @connect(state => ({
 	messages: state.roomFiles.messages,
@@ -33,10 +31,7 @@ import { Provider } from '@ant-design/react-native';
 export default class RoomFilesView extends LoggedView {
 	static propTypes = {
 		rid: PropTypes.string,
-		messages: PropTypes.array,
-		ready: PropTypes.bool,
 		user: PropTypes.object,
-		openRoomFiles: PropTypes.func,
 		closeRoomFiles: PropTypes.func
 	};
 
@@ -44,21 +39,12 @@ export default class RoomFilesView extends LoggedView {
 		super('RoomFilesView', props);
 		this.state = {
 			loading: true,
-			loadingMore: false,
-			files: [],
-			show: false
+			files: []
 		};
 	}
 
 	componentDidMount() {
-		this.limit = 20;
 		this.load();
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.ready && nextProps.ready !== this.props.ready) {
-			this.setState({ loading: false, loadingMore: false });
-		}
 	}
 
 	componentWillUnmount() {
@@ -68,57 +54,53 @@ export default class RoomFilesView extends LoggedView {
 	load = () => {
 		console.log(this.props.rid);
 		loadFiles(this.props.user, this.props.rid)
-			.then(files => {
-				if (files.length > 0) {
-					this.setState({ files });
-				}
+			.then((files) => {
+				this.setState({
+					files,
+					loading: false
+				});
 			});
-		// this.props.openRoomFiles(this.props.rid, this.limit);
 	};
 
-	moreData = () => {
-		const { loadingMore } = this.state;
-		const { messages } = this.props;
-		if (messages.length < this.limit) {
-			return;
-		}
-		if (!loadingMore) {
-			this.setState({ loadingMore: true });
-			this.limit += 20;
-			this.load();
-		}
-	};
-
-	renderEmpty = () => (
-		<View style={ styles.listEmptyContainer } testID='room-files-view'>
-			<Text>{ I18n.t('No_files') }</Text>
-		</View>
-	);
-
-	downloadFile = (fileId) => {
-		console.log('fileId:', fileId);
+	afterFileDelete = (fileId) => {
+		const index = this.state.files.findIndex((file) => file.fileId === fileId);
+		this.state.files.splice(index, 1);
+		this.setState({ files: this.state.files });
 	};
 
 	renderItem = ({ item }) => (
-		<FileItem file={item}/>
+		<FileItem file={ item } afterFileDelete={ (fileId) => this.afterFileDelete(fileId) }/>
 	);
 
 
 	render() {
-		const { messages, ready } = this.props;
-		// if (ready && messages.length === 0) {
-		// 	return this.renderEmpty();
-		// }
+		const { loading, files } = this.state;
 
-		const { loading, loadingMore } = this.state;
+		const emptyView = (
+			<View style={ styles.listEmptyContainer } testID='room-files-view'>
+				<Text>{ I18n.t('No_files') }</Text>
+			</View>
+		);
+
+		const loadingView = (
+			<View style={ { top: '40%' } }>
+				<ActivityIndicator/>
+			</View>
+		);
 		return (
 			<Provider>
-				<FlatList
-					data={ this.state.files }
-					renderItem={ this.renderItem }
-					style={ styles.list }
-					keyExtractor={ item => item._id }
-				/>
+				{ loading ? (loadingView) : (
+					files.length > 0 ? (
+						<FlatList
+							data={ files }
+							renderItem={ this.renderItem }
+							style={ styles.list }
+							keyExtractor={ item => item.fileId }
+						/>
+					) : (
+						emptyView
+					)
+				) }
 			</Provider>
 		);
 	}

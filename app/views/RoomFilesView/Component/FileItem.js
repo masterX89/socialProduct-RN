@@ -1,10 +1,12 @@
 /* eslint-disable */
 import React from 'react';
-
+import PropTypes from 'prop-types';
 // react-native UI
 import { Text, View } from 'react-native';
 // antd UI
-import { List, Modal, Button, WingBlank } from '@ant-design/react-native';
+import { List, WingBlank } from '@ant-design/react-native';
+import ImageFilePreview from './ImageFilePreview';
+import FileDelete from './FileDelete';
 
 const wingBlankButtonStyle = {
 	flexDirection: 'row',
@@ -13,13 +15,6 @@ const wingBlankButtonStyle = {
 };
 
 export default class FileItem extends React.PureComponent {
-	constructor(props) {
-		super(props);
-		this.state = {
-			show: false
-		};
-	}
-
 	render() {
 		const { file } = this.props;
 		return (
@@ -30,19 +25,17 @@ export default class FileItem extends React.PureComponent {
 						size='sm'
 						style={ { ...wingBlankButtonStyle } }
 					>
-						<Button size='small' type='ghost' disabled={ file.fileName.endsWith('jpeg') }>预览</Button>
-						<Button size='small' type='ghost'>删除</Button>
+						<ImageFilePreview file={ file }/>
+						<FileDelete fileId={ file.fileId } { ...this.props }/>
 					</WingBlank>
 
 				</List.Item>
-				<Modal
-					popup
-					visible={ this.state.show }
-					animationType="slide-up"
-				>
-				</Modal>
 			</View>
 		);
 	}
 }
+
+FileItem.propTypes = {
+	file: PropTypes.object.isRequired
+};
 

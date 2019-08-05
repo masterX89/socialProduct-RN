@@ -64,3 +64,38 @@ export function loadFiles(user, rid) {
 		})
 		.catch(err => console.log(err));
 }
+
+export function isImageFile(fileName) {
+	const reg = /(.*)\.(jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/i;
+	return reg.test(fileName);
+}
+
+export function getFilePreviewUrl(fileId) {
+	return `${ TEAM_CORE_HOST }/wopi/files/${ fileId }/contents`;
+}
+
+export function deleteFile(fileId, user) {
+	return fetch(`${ TEAM_CORE_HOST }/fileManager/deleteGroupFile?fileId=${ fileId }`, {
+		method: 'POST',
+		headers: {
+			'Auth-Token': user.token,
+			'Auth-uid': user.id
+		}
+	})
+		.then(data => data.json())
+		.then((res) => {
+			if (res.success) {
+				Toast.success('文件删除成功', 1);
+				return {
+					fileId,
+					success: true
+				};
+			}
+			Toast.fail('文件删除失败', 1);
+			return { success: false };
+		})
+		.catch((err) => {
+			console.log(err);
+			Toast.fail('文件删除失败', 1);
+		});
+}
