@@ -2,18 +2,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { FLOW_CORE_HOST } from '../../../../constants/Constants';
 import moment from 'moment';
-
 import _ from 'lodash';
+// react-native UI
+import { Text, ScrollView, FlatList, Dimensions } from 'react-native';
+// antd UI
+import { Button, List, WingBlank, ActivityIndicator } from '@ant-design/react-native';
+import { FLOW_CORE_HOST } from '../../../../constants/Constants';
 
 // utils
 import FlowPanel from '../../utils/FlowPanel';
 
-// react-native UI
-import { Text, ScrollView, FlatList, Dimensions, View } from 'react-native';
-// antd UI
-import { Button, List, WingBlank } from '@ant-design/react-native';
 import Avatar from '../../../../containers/Avatar';
 import styles from '../../../../containers/message/styles';
 
@@ -48,6 +47,7 @@ export default class ProjectApplyList extends React.PureComponent {
 			offset: 1,
 			nowTasks: [],
 			loadingMore: true,
+			loading: true,
 			projectTaskTemplate: [{
 				activityName: '项目申请审批'
 			}, {
@@ -100,18 +100,17 @@ export default class ProjectApplyList extends React.PureComponent {
 				}
 			})
 				.then(data => data.json())
-				.then(data => {
+				.then((data) => {
 					if (data.success) {
 						if (data.content.length === 0) {
 							this.setState({ loadingMore: false });
 						}
 						return data.content;
-					} else {
-						return [];
 					}
+					return [];
 				})
 				.catch(err => console.log(err));
-			//查询流程ID对应的辅助流程信息，如标题，说明等
+			// 查询流程ID对应的辅助流程信息，如标题，说明等
 			let url = `${ FLOW_CORE_HOST }/projectAndProcess/getHistoryByFlowIds?`;
 			_.each(tasks, (one) => {
 				url += `flowIds%5B%5D=${ one.processInstanceId }&`;
@@ -144,7 +143,8 @@ export default class ProjectApplyList extends React.PureComponent {
 			});
 			this.setState({
 				nowTasks: this.state.nowTasks.concat(finalTasks),
-				offset: this.state.pageSize + this.state.offset
+				offset: this.state.pageSize + this.state.offset,
+				loading: false
 			});
 		}
 	}
@@ -156,8 +156,8 @@ export default class ProjectApplyList extends React.PureComponent {
 	}
 
 	render() {
-		let { height } = Dimensions.get('window');
-		const { nowTasks, loadingMore, graphTaskTemplate, projectTaskTemplate } = this.state;
+		const { height } = Dimensions.get('window');
+		const { nowTasks, loadingMore, graphTaskTemplate, projectTaskTemplate, loading } = this.state;
 		return (
 			<ScrollView style={ (nowTasks.length > 0 ? ({
 				height: height * 0.65
@@ -192,11 +192,14 @@ export default class ProjectApplyList extends React.PureComponent {
 						</List.Item>
 					) }
 				/>
+				{ loading && <ActivityIndicator/> }
 				<Button
 					disabled={ !loadingMore }
 					onPress={ () => {
-						this.getMockData(this.props.activeSection)
-							.catch(err => console.log(err));
+						this.setState({ loading: true }, () => {
+							this.getMockData(this.props.activeSection)
+								.catch(err => console.log(err));
+						});
 					} }>{ loadingMore ? '加载更多' : '加载完成' }</Button>
 			</ScrollView>
 		);

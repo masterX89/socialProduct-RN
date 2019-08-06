@@ -1,16 +1,16 @@
 /* eslint-disable */
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { FLOW_CORE_HOST } from '../../../../constants/Constants';
 import moment from 'moment';
-
 import _ from 'lodash';
-
+import PropTypes from 'prop-types';
 // react-native UI
-import { Text, ScrollView, FlatList, Dimensions } from 'react-native';
+import { Text, ScrollView, FlatList, Dimensions, View } from 'react-native';
 // antd UI
-import { Button, List, WingBlank } from '@ant-design/react-native';
+import { ActivityIndicator, Button, List, WingBlank } from '@ant-design/react-native';
+import { FLOW_CORE_HOST } from '../../../../constants/Constants';
+
+
 import Avatar from '../../../../containers/Avatar';
 import styles from '../../../../containers/message/styles';
 
@@ -44,11 +44,18 @@ export default class MyApplyTasksList extends React.PureComponent {
 			pageSize: 10,
 			offset: 1,
 			nowTasks: [],
-			loadingMore: true
+			loadingMore: true,
+			loading: true
 		};
 	}
 
-	async getMockData(activeSection) {
+	componentDidMount() {
+		const { activeSection } = this.props;
+		this.getMockData(activeSection)
+			.catch(err => console.log(err));
+	}
+
+	getMockData = async(activeSection) => {
 		if (this.state.loadingMore) {
 			// 获取当前activeSection的tasks
 			let tasksUrl = `${ FLOW_CORE_HOST }/flow/projectApply/historyByAssigneeAndActivityNameListForCreator?assignee=${ this.props.user.name }(${ this.props.user.username })`;
@@ -63,18 +70,17 @@ export default class MyApplyTasksList extends React.PureComponent {
 				}
 			})
 				.then(data => data.json())
-				.then(data => {
+				.then((data) => {
 					if (data.success) {
 						if (data.content.length === 0) {
 							this.setState({ loadingMore: false });
 						}
 						return data.content;
-					} else {
-						return [];
 					}
+					return [];
 				})
 				.catch(err => console.log(err));
-			//查询流程ID对应的辅助流程信息，如标题，说明等
+			// 查询流程ID对应的辅助流程信息，如标题，说明等
 			let url = `${ FLOW_CORE_HOST }/projectAndProcess/getHistoryByFlowIds?`;
 			_.each(tasks, (one) => {
 				url += `flowIds%5B%5D=${ one.processInstanceId }&`;
@@ -107,20 +113,15 @@ export default class MyApplyTasksList extends React.PureComponent {
 			});
 			this.setState({
 				nowTasks: this.state.nowTasks.concat(finalTasks),
-				offset: this.state.pageSize + this.state.offset
+				offset: this.state.pageSize + this.state.offset,
+				loading: false
 			});
 		}
-	}
-
-	componentDidMount() {
-		const { activeSection } = this.props;
-		this.getMockData(activeSection)
-			.catch(err => console.log(err));
-	}
+	};
 
 	render() {
-		let { height } = Dimensions.get('window');
-		const { nowTasks, loadingMore } = this.state;
+		const { height } = Dimensions.get('window');
+		const { nowTasks, loadingMore, loading } = this.state;
 		return (
 			<ScrollView style={ (nowTasks.length > 0 ? ({
 				height: height * 0.65
@@ -149,11 +150,14 @@ export default class MyApplyTasksList extends React.PureComponent {
 						</List.Item>
 					) }
 				/>
+				{ loading && <ActivityIndicator/> }
 				<Button
 					disabled={ !loadingMore }
 					onPress={ () => {
-						this.getMockData(this.props.activeSection)
-							.catch(err => console.log(err));
+						this.setState({ loading: true }, () => {
+							this.getMockData(this.props.activeSection)
+								.catch(err => console.log(err));
+						});
 					} }>{ loadingMore ? '加载更多' : '加载完成' }</Button>
 			</ScrollView>
 		);
