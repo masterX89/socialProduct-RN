@@ -9,7 +9,7 @@ export function uploadImageFile(file, user, rid) {
 		uploadFile = {
 			...uploadFile,
 			uri: file.path,
-			name: file.name
+			name: file.name.split('.')[file.name.split('.').length - 1] === file.mime.split('/')[file.mime.split('/').length - 1] ? file.name : `${ file.name }.${ file.mime.split('/')[file.mime.split('/').length - 1] }`
 		};
 	} else if (Platform.OS === 'ios') {
 		uploadFile = {
@@ -20,7 +20,7 @@ export function uploadImageFile(file, user, rid) {
 	}
 	const formData = new FormData();
 	formData.append('file', uploadFile);
-	formData.append('fileName', file.filename);
+	formData.append('fileName', uploadFile.name);
 	formData.append('groupId', rid);
 
 	fetch(`${ TEAM_CORE_HOST }/fileManager/uploadGroupFile`, {

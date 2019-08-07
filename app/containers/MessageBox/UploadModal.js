@@ -66,7 +66,7 @@ export default class UploadModal extends Component {
 		if (!equal(props.file, state.file) && props.file && props.file.path) {
 			return {
 				file: props.file,
-				name: props.file.filename || 'Filename',
+				name: props.file.filename || `未命名.${ props.file.mime.split('/')[props.file.mime.split('/').length - 1] }`,
 				description: ''
 			};
 		}
@@ -95,18 +95,18 @@ export default class UploadModal extends Component {
 			>
 				<View style={[styles.container, { width: width - 32 }]}>
 					<View style={styles.titleContainer}>
-						<Text style={styles.title}>Upload file?</Text>
+						<Text style={styles.title}>上传图片</Text>
 					</View>
 
 					<ScrollView style={styles.scrollView}>
 						<Image source={{ isStatic: true, uri: file.path }} style={styles.image} />
 						<TextInput
-							placeholder='File name'
+							placeholder='未命名文件'
 							value={name}
 							onChangeText={value => this.setState({ name: value })}
 						/>
 						<TextInput
-							placeholder='File description'
+							placeholder='文件描述'
 							value={description}
 							onChangeText={value => this.setState({ description: value })}
 						/>
