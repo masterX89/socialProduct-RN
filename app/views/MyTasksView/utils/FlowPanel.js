@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // react-native UI
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, Dimensions } from 'react-native';
 // antd UI
 import _ from 'lodash';
 import moment from 'moment';
@@ -158,13 +158,14 @@ export default class FlowPanel extends React.PureComponent {
 	}
 
 	render() {
+		const { height } = Dimensions.get('window');
 		return (
 			<View>
 				<Button type='ghost' size='small' onPress={ this.showModal.bind(this) }>
 					<Text style={ { fontSize: 17 } }>查看</Text>
 				</Button>
 				<Modal
-					popup={ this.props.template.length <= 7 }
+					popup={ this.props.template.length <= 7 && height > 650 }
 					visible={ this.state.show }
 					animationType='slide-up'
 					onClose={ this.cancelModal.bind(this) }
