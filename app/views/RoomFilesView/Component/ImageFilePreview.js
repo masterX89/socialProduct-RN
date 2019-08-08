@@ -2,11 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // react-native UI
-import { Text, View, WebView } from 'react-native';
+import { Dimensions, View, WebView } from 'react-native';
 // antd UI
 import { Modal, Button } from '@ant-design/react-native';
 import { isImageFile, getFilePreviewUrl } from '../../../lib/methods/FileUtils';
-
 
 export default class ImageFilePreview extends React.PureComponent {
 	constructor(props) {
@@ -26,35 +25,29 @@ export default class ImageFilePreview extends React.PureComponent {
 
 	render() {
 		const { file: { name, fileId } } = this.props;
+		const { height } = Dimensions.get('window');
+
+		const imgUrl = getFilePreviewUrl(fileId);
+		const html = `<img src="${ imgUrl }" style="width:100%;height:auto;position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);" alt="img"/>`;
 		return (
 			<View>
 				<Button size='small' type='ghost' disabled={ !isImageFile(name) }
 				        onPress={ this.handleOpen }>预览</Button>
 				<Modal
-					popup
+					transparent
+					onClose={ this.handleClose }
+					maskClosable
 					visible={ this.state.show }
-					animationType="slide-up"
+					closable
 				>
-					<WebView
-						source={ { uri: getFilePreviewUrl(fileId) } }
-						style={ {
-							height: 600
-						} }
-						onLoadStart={ (e) => console.log('onLoadStart') }
-						renderError={ () => {
-							console.log('renderError');
-							return <View><Text>renderError回调了，出现错误</Text></View>;
-						} }
-						renderLoading={ () => {
-							return <View><Text>加载中。。。</Text></View>;
-						} }
-						startInLoadingState
-						onError={ () => {
-							console.log('加载失败');
-						} }
-						scrollEnabled
-					/>
-					<Button type='ghost' onPress={ this.handleClose }>关闭预览</Button>
+					<View style={ {
+						height: height * 0.65
+					} }>
+						<WebView
+							originWhitelist={ ['*'] }
+							source={ { html: html } }
+						/>
+					</View>
 				</Modal>
 			</View>
 		);

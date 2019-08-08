@@ -945,11 +945,6 @@ export default class MyTasksView extends LoggedView {
 										</List.Item>)}
 										keyExtractor={(item, index) => item.id}
 									/>
-									{/*<FlatListInTasks listData={ this.state.checkerList } initialActiveSections={ () => {
-										this.initialActiveSections();
-									} } listQuery={ () => {
-										this.listQuery();
-									} }/>*/}
 								</Accordion.Panel>
 								<Accordion.Panel
 									header={`图纸审定审批【${ _.size(self.state.deciderList) }】`}

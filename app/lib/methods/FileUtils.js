@@ -9,13 +9,13 @@ export function uploadImageFile(file, user, rid) {
 		uploadFile = {
 			...uploadFile,
 			uri: file.path,
-			name: file.name.split('.')[file.name.split('.').length - 1] === file.mime.split('/')[file.mime.split('/').length - 1] ? file.name : `${ file.name }.${ file.mime.split('/')[file.mime.split('/').length - 1] }`
+			name: file.name.split('.')[file.name.split('.').length - 1] === file.mime.split('/')[file.mime.split('/').length - 1] ? file.name : `${ file.name }.${ file.mime.split('/')[file.mime.split('/').length - 1] }`.replace(/[^\x00-\x7F]/g, '')
 		};
 	} else if (Platform.OS === 'ios') {
 		uploadFile = {
 			...uploadFile,
 			uri: file.sourceURL,
-			name: file.filename
+			name: file.name
 		};
 	}
 	const formData = new FormData();
