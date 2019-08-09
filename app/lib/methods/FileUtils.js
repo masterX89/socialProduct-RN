@@ -1,7 +1,22 @@
 import { Platform } from 'react-native';
 import _ from 'lodash';
+import { Base64 } from 'js-base64';
 import { Toast } from '@ant-design/react-native';
 import { TEAM_CORE_HOST } from '../../constants/Constants';
+
+export const fileOpt = {
+	isEditableFilePattern: /\.(txt|diff?|patch|svg|asc|cnf|cfg|conf|html?|.html|cfm|cgi|aspx?|ini|pl|py|md|css|cs|js|jsp|log|htaccess|htpasswd|gitignore|gitattributes|env|json|atom|eml|rss|markdown|sql|xml|xslt?|sh|rb|as|bat|cmd|cob|for|ftn|frm|frx|inc|lisp|scm|coffee|php[3-6]?|java|c|cbl|go|h|scala|vb|tmpl|lock|go|yml|yaml|tsv|lst)$/i,
+	isViewableFilePattern: /\.(doc|docm|docx|dot|dotm|dotx|odt|odp|pot|potm|potx|pps|ppsm|ppsx|ppt|pptm|pptx|ods|xls|xlsb|xlsm|xlsx|pdf|one|onetoc2?)$/i,
+	isProjectImagePattern: /\.(dwg?)$/i,
+	isImageFilePattern: /\.(jpe?g|gif|bmp|png|svg|tiff?)$/i,
+	isExtractableFilePattern: /\.(gz|tar|rar|g?zip)$/i,
+	officeWordTypePattern: /\.(doc|docm|docx|dot|dotm|dotx|odt?)$/i,
+	officePptTypePattern: /\.(odp|pot|potm|potx|pps|ppsm|ppsx|ppt|pptm|pptx?)$/i,
+	officeExcelTypePattern: /\.(ods|xls|xlsb|xlsm|xlsx?)$/i,
+	pdfTypePattern: /\.(pdf?)$/i,
+	officeOneNoteTypePattern: /\.(one|onetoc2?)$/i,
+	isBase64CodePattern: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
+};
 
 export function uploadImageFile(file, user, rid) {
 	let uploadFile = { type: file.mime };
@@ -9,7 +24,7 @@ export function uploadImageFile(file, user, rid) {
 		uploadFile = {
 			...uploadFile,
 			uri: file.path,
-			name: (file.name.split('.')[file.name.split('.').length - 1] === file.mime.split('/')[file.mime.split('/').length - 1] ? file.name : `${ file.name }.${ file.mime.split('/')[file.mime.split('/').length - 1] }`).replace(/[^\x00-\x7F]/g, '')
+			name: Base64.encode(file.name.split('.')[file.name.split('.').length - 1] === file.mime.split('/')[file.mime.split('/').length - 1] ? file.name : `${ file.name }.${ file.mime.split('/')[file.mime.split('/').length - 1] }`)
 		};
 	} else if (Platform.OS === 'ios') {
 		uploadFile = {
@@ -63,11 +78,6 @@ export function loadFiles(user, rid) {
 			return [];
 		})
 		.catch(err => console.log(err));
-}
-
-export function isImageFile(fileName) {
-	const reg = /(.*)\.(jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/i;
-	return reg.test(fileName);
 }
 
 export function getFilePreviewUrl(fileId) {

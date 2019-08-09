@@ -5,8 +5,10 @@ import PropTypes from 'prop-types';
 import { Text, View } from 'react-native';
 // antd UI
 import { List, WingBlank } from '@ant-design/react-native';
+import { Base64 } from 'js-base64';
 import ImageFilePreview from './ImageFilePreview';
 import FileDelete from './FileDelete';
+import { fileOpt } from '../../../lib/methods/FileUtils';
 
 const wingBlankButtonStyle = {
 	flexDirection: 'row',
@@ -20,7 +22,7 @@ export default class FileItem extends React.PureComponent {
 		return (
 			<View>
 				<List.Item>
-					<Text>{ file.fileName === 'undefined' ? (file.name) : (file.fileName) }</Text>
+					<Text>{ fileOpt.isBase64CodePattern.test(file.name) ? Base64.decode(file.name) : file.name }</Text>
 					<WingBlank
 						size='sm'
 						style={ { ...wingBlankButtonStyle } }

@@ -1,11 +1,12 @@
 /* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Base64 } from 'js-base64';
 // react-native UI
 import { Dimensions, View, WebView } from 'react-native';
 // antd UI
 import { Modal, Button } from '@ant-design/react-native';
-import { isImageFile, getFilePreviewUrl } from '../../../lib/methods/FileUtils';
+import { getFilePreviewUrl, fileOpt } from '../../../lib/methods/FileUtils';
 
 export default class ImageFilePreview extends React.PureComponent {
 	constructor(props) {
@@ -31,7 +32,8 @@ export default class ImageFilePreview extends React.PureComponent {
 		const html = `<img src="${ imgUrl }" style="width:100%;height:auto;position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);" alt="img"/>`;
 		return (
 			<View>
-				<Button size='small' type='ghost' disabled={ !isImageFile(name) }
+				<Button size='small' type='ghost'
+				        disabled={ !(fileOpt.isImageFilePattern.test(fileOpt.isBase64CodePattern.test(name) ? Base64.decode(name) : name)) }
 				        onPress={ this.handleOpen }>预览</Button>
 				<Modal
 					transparent
