@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableWithoutFeedback, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, StyleSheet, WebView, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -62,7 +62,6 @@ export default class ReactionsModal extends React.PureComponent {
 	static propTypes = {
 		isVisible: PropTypes.bool.isRequired,
 		onClose: PropTypes.func.isRequired,
-		reactions: PropTypes.object.isRequired,
 		user: PropTypes.object.isRequired,
 		customEmojis: PropTypes.object.isRequired
 	}
@@ -97,8 +96,9 @@ export default class ReactionsModal extends React.PureComponent {
 
 	render() {
 		const {
-			isVisible, onClose, reactions
+			isVisible, onClose
 		} = this.props;
+		const { height } = Dimensions.get('window');
 		return (
 			<Modal
 				isVisible={isVisible}
@@ -117,12 +117,15 @@ export default class ReactionsModal extends React.PureComponent {
 						<Text style={styles.title}>{I18n.t('Reactions')}</Text>
 					</View>
 				</TouchableWithoutFeedback>
-				<View style={styles.listContainer}>
-					<FlatList
-						data={reactions}
-						renderItem={({ item }) => this.renderItem(item)}
-						keyExtractor={item => item.emoji}
-					/>
+				<View style={ styles.listContainer }>
+					<View style={ {
+						height: height * 0.65
+					} }>
+						<WebView
+							originWhitelist={ ['*'] }
+							source={ { html: this.props.html } }
+						/>
+					</View>
 				</View>
 			</Modal>
 		);

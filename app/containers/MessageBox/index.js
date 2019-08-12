@@ -213,17 +213,14 @@ export default class MessageBox extends React.PureComponent {
 
 	sendImageMessage = async(file) => {
 		this.setState({ file: { isVisible: false } });
-		const fileInfo = {
-			name: file.name,
-			description: file.description,
-			size: file.size,
-			type: file.mime,
-			store: 'Uploads',
-			path: file.path
-		};
 		try {
-			uploadImageFile(file, this.props.user, this.props.rid);
-			// await RocketChat.sendFileMessage(this.props.rid, fileInfo);
+			uploadImageFile(file, this.props.user, this.props.rid)
+				.then((res) => {
+					if (res.success) {
+						RocketChat.sendMessage(this.props.rid, `文件已上传：${ file.name }(${ res.content })`)
+							.catch(err => console.log(err));
+					}
+				});
 		} catch (e) {
 			log('sendImageMessage', e);
 		}

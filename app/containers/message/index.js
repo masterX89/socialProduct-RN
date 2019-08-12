@@ -22,6 +22,7 @@ import { actionsShow, errorActionsShow, toggleReactionPicker, replyBroadcast } f
 import messagesStatus from '../../constants/messagesStatus';
 import Touch from '../../utils/touch';
 import I18n from '../../i18n';
+import { fileOpt, getFilePreviewUrl } from '../../lib/methods/FileUtils';
 
 const SYSTEM_MESSAGES = [
 	'r',
@@ -151,6 +152,13 @@ export default class Message extends React.Component {
 	}
 
 	onPress = () => {
+		const fileMessageReg = /^文件已上传：(.+)\((.+)\)/;
+		if (fileMessageReg.test(this.props.item.msg)) {
+			const fileName = this.props.item.msg.slice(6, this.props.item.msg.indexOf('('));
+			if (fileOpt.isImageFilePattern.test(fileName)) {
+				this.setState({ reactionsModal: true });
+			}
+		}
 		KeyboardUtils.dismiss();
 	}
 
@@ -342,6 +350,17 @@ export default class Message extends React.Component {
 		const isEditing = message._id === item._id && editing;
 		const accessibilityLabel = I18n.t('Message_accessibility', { user: username, time: moment(item.ts).format(this.timeFormat), message: this.props.item.msg });
 
+		let html = null;
+		const fileMessageReg = /^文件已上传：(.+)\((.+)\)/;
+		if (fileMessageReg.test(this.props.item.msg)) {
+			const fileName = this.props.item.msg.slice(6, this.props.item.msg.indexOf('('));
+			if (fileOpt.isImageFilePattern.test(fileName)) {
+				const fileId = this.props.item.msg.split('(')[1].split(')')[0];
+				const imgUrl = getFilePreviewUrl(fileId);
+				html = `<img src="${ imgUrl }" style="width:100%;height:auto;position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);" alt="img"/>`;
+			}
+		}
+
 		return (
 			<Touch
 				onPress={this.onPress}
@@ -369,6 +388,7 @@ export default class Message extends React.Component {
 							onClose={this.onClose}
 							reactions={item.reactions}
 							user={this.props.user}
+							html={html}
 						/>
 						: null
 					}

@@ -38,7 +38,7 @@ export function uploadImageFile(file, user, rid) {
 	formData.append('fileName', uploadFile.name);
 	formData.append('groupId', rid);
 
-	fetch(`${ TEAM_CORE_HOST }/fileManager/uploadGroupFile`, {
+	return fetch(`${ TEAM_CORE_HOST }/fileManager/uploadGroupFile`, {
 		method: 'POST',
 		headers: {
 			'Auth-Token': user.token,
@@ -51,9 +51,9 @@ export function uploadImageFile(file, user, rid) {
 		.then((res) => {
 			if (res.success) {
 				Toast.success('文件上传成功', 1);
-			} else {
-				Toast.fail('文件上传失败', 1);
+				return res;
 			}
+			Toast.fail('文件上传失败', 1);
 		})
 		.catch((err) => {
 			console.log(err);
