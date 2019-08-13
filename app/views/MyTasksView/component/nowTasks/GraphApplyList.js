@@ -4,14 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 // antd UI
-import { Button, List, WingBlank, ActivityIndicator } from '@ant-design/react-native';
-// react-native UI
-import { FLOW_CORE_HOST } from '../../../../constants/Constants';
-
-// utils
-import FlowPanel from '../../utils/FlowPanel';
-
+import { Button, List, WingBlank } from '@ant-design/react-native';
 import Avatar from '../../../../containers/Avatar';
+import GraphModal from '../GraphModal';
 
 const wingBlankTitleStyle = {
 	flexDirection: 'row',
@@ -64,9 +59,7 @@ export default class GraphApplyList extends React.PureComponent {
 				<Button type='ghost' size='small' disabled>
 					<Text style={ { fontSize: 17 } }>查看</Text>
 				</Button>
-				<Button type='ghost' size='small' disabled>
-					<Text style={ { fontSize: 17 } }>审批</Text>
-				</Button>
+				<GraphModal record={ item } { ...this.props }/>
 			</WingBlank>
 		</List.Item>
 	);

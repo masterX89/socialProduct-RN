@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { Text, View, FlatList, Dimensions } from 'react-native';
+import { Text } from 'react-native';
 
 // antd UI
 import { Tabs, Provider, Badge } from '@ant-design/react-native';
@@ -35,6 +35,7 @@ export default class TasksTab extends React.PureComponent {
 	}
 
 	async getMockData() {
+		console.log('父组件方法');
 		// 获取当前activeSection的tasks
 		const tasksUrl = `${ FLOW_CORE_HOST }/flow/projectApply/tasks?assignee=${ this.props.user.name }(${ this.props.user.username })`;
 		const tasks = await fetch(tasksUrl, {
@@ -147,7 +148,10 @@ export default class TasksTab extends React.PureComponent {
 						this.getMockData()
 							.catch(err => console.log(err));
 					} } loading={ loading }/>
-					<GraphApplyTab graphApplyList={ graphApplyList }/>
+					<GraphApplyTab graphApplyList={ graphApplyList } getMockData={ () => {
+						this.getMockData()
+							.catch(err => console.log(err));
+					} }/>
 				</Tabs>
 			</Provider>
 

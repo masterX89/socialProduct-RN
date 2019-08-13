@@ -1,15 +1,22 @@
-/* eslint-disable */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { FLOW_CORE_HOST } from '../../../constants/Constants';
 import _ from 'lodash';
-
 // react-native UI
-import { Text, View, ScrollView, FlatList } from 'react-native';
+import { Text, View, FlatList, Dimensions, StyleSheet } from 'react-native';
 // antd UI
-import { Modal, Button, WingBlank, List, Checkbox, Toast } from '@ant-design/react-native';
+import { Modal, Button, WingBlank, List, Checkbox, Toast, ActivityIndicator } from '@ant-design/react-native';
 
+import { FLOW_CORE_HOST } from '../../../constants/Constants';
+
+const { height } = Dimensions.get('window');
+const styles = StyleSheet.create({
+	Container: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		height: height * 0.415
+	}
+});
 const wingBlankButtonStyle = {
 	flexDirection: 'row',
 	justifyContent: 'space-between',
@@ -27,28 +34,27 @@ const wingBlankButtonStyle = {
 export default class GraphModal extends React.PureComponent {
 	static propTypes = {
 		user: PropTypes.object,
-		record: PropTypes.object
+		record: PropTypes.object,
+		getMockData: PropTypes.func,
+		initialActiveSections: PropTypes.func
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = {
 			showGraphModel: false,
-			processId: '',
 			mockData: [],
 			rejectIds: [],
-			checkboxItem1: true
+			loading: true,
+			getDataSuccess: false
 		};
 	}
 
-	componentDidMount() {
-		const { processDefinitionId: processId } = this.props;
-	}
-
-	cancelModal() {
-		this.setState({
-			showGraphModel: false
-		});
+	// 防止内存泄漏
+	componentWillUnmount() {
+		this.setState = (state, callback) => {
+			return;
+		};
 	}
 
 	getMock() {
@@ -74,33 +80,43 @@ export default class GraphModal extends React.PureComponent {
 					const rejectIds = _.map(mockData, item => item.key);
 					this.setState({
 						mockData,
-						rejectIds
+						rejectIds,
+						loading: false,
+						getDataSuccess: true
+					});
+				} else {
+					this.setState({
+						loading: false,
+						getDataSuccess: false
 					});
 				}
 			})
 			.catch(err => console.log(err));
 	}
 
-	showModal() {
-		this.getMock();
+	showModal = () => {
 		this.setState({
 			showGraphModel: true
+		}, () => {
+			this.getMock();
+		});
+	};
+
+	cancelModal() {
+		this.setState({
+			showGraphModel: false
 		});
 	}
 
 	changeRejectIds(event, item) {
-		console.log('event:', event.target.checked);
-		const rejectIds = this.state.rejectIds;
+		const { rejectIds } = this.state;
 		if (event.target.checked) {
 			_.remove(rejectIds, one => one === item.key);
 		} else {
 			rejectIds.push(item.key);
 		}
 		this.setState({
-			rejectIds,
-			checkboxItem1: event.target.checked
-		}, () => {
-			console.log('rejectIds:', this.state.rejectIds);
+			rejectIds
 		});
 	}
 
@@ -113,7 +129,6 @@ export default class GraphModal extends React.PureComponent {
 		}
 		values.processId = this.props.record.processInstanceId;
 		values.taskId = this.props.record.taskId;
-		console.log('values:', values);
 		fetch(`${ FLOW_CORE_HOST }/flow/graphApply/queryApprovingGraph?processId=${ this.props.record.processInstanceId }`, {
 			method: 'GET',
 			headers: {
@@ -131,13 +146,11 @@ export default class GraphModal extends React.PureComponent {
 					values.approved = values.rejectIds !== temp.join(',');
 				}
 				values.memo = '同意';
-				console.log('values in post: ', values);
 				let valuesInPost = '';
 				_.each(_.keys(values), (one) => {
 					valuesInPost += `${ one }=${ values[one] }&`;
 				});
 				valuesInPost = valuesInPost.slice(0, valuesInPost.length - 1);
-				console.log('valuesInPost:', valuesInPost);
 				fetch(`${ FLOW_CORE_HOST }/flow/graphApply/personalApproveComplete`, {
 					method: 'POST',
 					headers: {
@@ -151,9 +164,9 @@ export default class GraphModal extends React.PureComponent {
 					.then((data2) => {
 						if (data2.success) {
 							Toast.success('审批成功', 1);
-							this.props.listQuery();
+							this.props.getMockData();
 						} else {
-							this.props.listQuery();
+							this.props.getMockData();
 							Toast.fail('网络错误');
 						}
 					});
@@ -165,22 +178,23 @@ export default class GraphModal extends React.PureComponent {
 	}
 
 	render() {
-		console.log('record:', this.props);
+		const { loading, showGraphModel, mockData, getDataSuccess } = this.state;
 		return (
 			<View>
-				<Button type='ghost' size='small' onPress={ this.showModal.bind(this) }>
+				<Button type='ghost' size='small' onPress={ this.showModal }>
 					<Text style={ { fontSize: 17 } }>审批</Text>
 				</Button>
 				<Modal
 					popup
-					visible={ this.state.showGraphModel }
+					visible={ showGraphModel }
 					animationType='slide-up'
 					onClose={ this.cancelModal.bind(this) }
 				>
-					<View>
-						<FlatList
+
+					<View style={ { height: height * 0.5 } }>
+						{ !loading ? (getDataSuccess ? (<FlatList
 							keyExtractor={ (item, index) => item.key }
-							data={ this.state.mockData }
+							data={ mockData }
 							renderItem={ ({ item }) => (
 								<List.Item>
 									<Checkbox.CheckboxItem
@@ -190,9 +204,16 @@ export default class GraphModal extends React.PureComponent {
 									>
 										<Text style={ { fontSize: 17 } }>{ item.title }</Text>
 									</Checkbox.CheckboxItem>
+									<Button>预览</Button>
 								</List.Item>
 							) }
-						/>
+						/>) : (<View style={ styles.Container }>
+							<Text>获取图纸数据失败，请重试</Text>
+						</View>)) : (
+							<View style={ styles.Container }>
+								<ActivityIndicator/>
+							</View>
+						) }
 						<WingBlank
 							size='sm'
 							style={ { ...wingBlankButtonStyle } }
@@ -200,7 +221,7 @@ export default class GraphModal extends React.PureComponent {
 							<Button type='ghost' onPress={ this.cancelModal.bind(this) }>
 								取消
 							</Button>
-							<Button type='ghost' onPress={ () => {
+							<Button type='ghost' disabled={ !getDataSuccess } onPress={ () => {
 								this.confirmGraphModal();
 							} }>
 								审批
