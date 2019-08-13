@@ -6,7 +6,7 @@ import moment from 'moment';
 // antd UI
 import { Button, List, WingBlank } from '@ant-design/react-native';
 import Avatar from '../../../../containers/Avatar';
-import GraphModal from '../GraphModal';
+import GraphModal from './GraphModal';
 
 const wingBlankTitleStyle = {
 	flexDirection: 'row',

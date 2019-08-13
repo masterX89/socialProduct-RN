@@ -7,7 +7,8 @@ import { Text, View, FlatList, Dimensions, StyleSheet } from 'react-native';
 // antd UI
 import { Modal, Button, WingBlank, List, Checkbox, Toast, ActivityIndicator } from '@ant-design/react-native';
 
-import { FLOW_CORE_HOST } from '../../../constants/Constants';
+import { FLOW_CORE_HOST } from '../../../../constants/Constants';
+import GraphPreviewModal from './GraphPreviewModal';
 
 const { height } = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -204,7 +205,7 @@ export default class GraphModal extends React.PureComponent {
 									>
 										<Text style={ { fontSize: 17 } }>{ item.title }</Text>
 									</Checkbox.CheckboxItem>
-									<Button>预览</Button>
+									<GraphPreviewModal currentGraph={ item }/>
 								</List.Item>
 							) }
 						/>) : (<View style={ styles.Container }>
