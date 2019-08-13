@@ -5,7 +5,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 // react-native UI
-import { Text, ScrollView, FlatList, Dimensions } from 'react-native';
+import { Text, ScrollView, FlatList, Dimensions, View } from 'react-native';
 // antd UI
 import { ActivityIndicator, Button, List, WingBlank } from '@ant-design/react-native';
 import { FLOW_CORE_HOST } from '../../../../constants/Constants';
@@ -158,7 +158,7 @@ export default class MyApplyTasksList extends React.PureComponent {
 							this.getMockData(this.props.activeSection)
 								.catch(err => console.log(err));
 						});
-					} }>{ loadingMore ? '加载更多' : '加载完成' }</Button>
+					} }>{ loadingMore ? '加载更多' : '暂无更多任务' }</Button>
 			</ScrollView>
 		);
 	}

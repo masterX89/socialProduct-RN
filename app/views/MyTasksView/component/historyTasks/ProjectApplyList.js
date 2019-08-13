@@ -200,7 +200,7 @@ export default class ProjectApplyList extends React.PureComponent {
 							this.getMockData(this.props.activeSection)
 								.catch(err => console.log(err));
 						});
-					} }>{ loadingMore ? '加载更多' : '加载完成' }</Button>
+					} }>{ loadingMore ? '加载更多' : '暂无更多任务' }</Button>
 			</ScrollView>
 		);
 	}
