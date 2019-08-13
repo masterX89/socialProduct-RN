@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 // antd UI
-import { Button, List, WingBlank } from '@ant-design/react-native';
+import { List, WingBlank } from '@ant-design/react-native';
 import Avatar from '../../../../containers/Avatar';
 import GraphModal from './GraphModal';
+import FlowPanel from '../../utils/FlowPanel';
 
 const wingBlankTitleStyle = {
 	flexDirection: 'row',
@@ -40,6 +41,32 @@ export default class GraphApplyList extends React.PureComponent {
 		nowTasks: PropTypes.array
 	};
 
+	state = {
+		graphTaskTemplate: [{
+			activityName: '图纸申请审批'
+		}, {
+			activityName: '设计'
+		}, {
+			activityName: '校对'
+		}, {
+			activityName: '专业负责人'
+		}, {
+			activityName: '会签'
+		}, {
+			activityName: '审核'
+		}, {
+			activityName: '审定'
+		}, {
+			activityName: '设总'
+		}, {
+			activityName: '项目经理'
+		}, {
+			activityName: '档案审批人'
+		}, {
+			activityName: '结束'
+		}]
+	};
+
 	renderItem = ({ item }) => (
 		<List.Item>
 			<WingBlank style={ { ...wingBlankTitleStyle } }>
@@ -56,9 +83,9 @@ export default class GraphApplyList extends React.PureComponent {
 			<WingBlank style={ { ...wingBlankButtonStyle } }>
 				<Text style={ { color: '#808080' } }>{ moment(new Date(item.startTime))
 					.format('YYYY-MM-DD HH:mm') }</Text>
-				<Button type='ghost' size='small' disabled>
-					<Text style={ { fontSize: 17 } }>查看</Text>
-				</Button>
+				<FlowPanel
+					processId={ item.processInstanceId }
+					template={ this.state.graphTaskTemplate }/>
 				<GraphModal record={ item } { ...this.props }/>
 			</WingBlank>
 		</List.Item>

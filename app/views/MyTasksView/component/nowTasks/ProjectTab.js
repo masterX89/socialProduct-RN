@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 // react-native UI
 import { View, Text, FlatList, StyleSheet, ScrollView, Dimensions } from 'react-native';
 // antd UI
-import { Button, List, WingBlank, ActivityIndicator } from '@ant-design/react-native';
+import { List, WingBlank, ActivityIndicator } from '@ant-design/react-native';
 import { connect } from 'react-redux';
 
 import Avatar from '../../../../containers/Avatar';
 import FinishTaskModal from './FinishTaskModal';
+import FlowPanel from '../../utils/FlowPanel';
 
 const wingBlankTitleStyle = {
 	flexDirection: 'row',
@@ -42,6 +43,20 @@ export default class ProjectTab extends React.PureComponent {
 		loading: PropTypes.bool
 	};
 
+	state = {
+		projectTaskTemplate: [{
+			activityName: '项目申请审批'
+		}, {
+			activityName: '部门领导'
+		}, {
+			activityName: '知识管理'
+		}, {
+			activityName: 'IT管理'
+		}, {
+			activityName: '结束'
+		}]
+	};
+
 	renderItem = ({ item }) => (
 		<List.Item wrap>
 			<WingBlank size='sm' style={ wingBlankTitleStyle }>
@@ -51,12 +66,14 @@ export default class ProjectTab extends React.PureComponent {
 					size={ 20 }
 					avatar={ this.props.user.avatar }
 				/>
-				<Text style={ { fontSize: 17 } }>{ item.title }</Text>
+				<Text style={ { fontSize: 17 } }>{ item.title }/<Text style={ {
+					color: '#00f'
+				} }>{ item.activityName }</Text></Text>
 			</WingBlank>
 			<WingBlank size='sm' style={ wingBlankButtonStyle }>
-				<Button type='ghost' size='small' disabled>
-					<Text style={ { fontSize: 17 } }>查看</Text>
-				</Button>
+				<FlowPanel
+					processId={ item.processInstanceId }
+					template={ this.state.projectTaskTemplate }/>
 				<FinishTaskModal record={ item } { ...this.props }/>
 			</WingBlank>
 		</List.Item>
