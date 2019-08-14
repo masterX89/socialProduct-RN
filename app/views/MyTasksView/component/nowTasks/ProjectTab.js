@@ -5,6 +5,7 @@ import { View, Text, FlatList, StyleSheet, ScrollView, Dimensions } from 'react-
 // antd UI
 import { List, WingBlank, ActivityIndicator } from '@ant-design/react-native';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import Avatar from '../../../../containers/Avatar';
 import FinishTaskModal from './FinishTaskModal';
@@ -66,11 +67,13 @@ export default class ProjectTab extends React.PureComponent {
 					size={ 20 }
 					avatar={ this.props.user.avatar }
 				/>
-				<Text style={ { fontSize: 17 } }>{ item.title }/<Text style={ {
+				<Text style={ { fontSize: 17 } }>{ item.metaName }/<Text style={ {
 					color: '#00f'
 				} }>{ item.activityName }</Text></Text>
 			</WingBlank>
 			<WingBlank size='sm' style={ wingBlankButtonStyle }>
+				<Text style={ { color: '#808080' } }>{ moment(new Date(item.startTime))
+					.format('YYYY-MM-DD HH:mm') }</Text>
 				<FlowPanel
 					processId={ item.processInstanceId }
 					template={ this.state.projectTaskTemplate }/>

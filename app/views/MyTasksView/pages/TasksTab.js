@@ -35,7 +35,6 @@ export default class TasksTab extends React.PureComponent {
 	}
 
 	async getMockData() {
-		console.log('父组件方法');
 		// 获取当前activeSection的tasks
 		const tasksUrl = `${ FLOW_CORE_HOST }/flow/projectApply/tasks?assignee=${ this.props.user.name }(${ this.props.user.username })`;
 		const tasks = await fetch(tasksUrl, {
@@ -76,49 +75,27 @@ export default class TasksTab extends React.PureComponent {
 			})
 			.catch(err => console.log(err));
 
-		const promises = [];
 		// 组合finalTasks
-		const finalTasks = [];
-		_.each(tasks, (item) => {
+		const finalTasks = _.map(tasks, (item) => {
 			const info = _.find(taskInfos, { processId: item.processInstanceId });
 			const type = item.processDefinitionId.split(':')[0];
-			// 获取title
-			const promise = fetch(`${ FLOW_CORE_HOST }/projectAndProcess/getByProcessId?processId=${ item.processInstanceId }`, {
-				method: 'GET',
-				headers: {
-					'Auth-Token': this.props.user.token,
-					'Auth-uid': this.props.user.id
-				}
-			})
-				.then(data => data.json())
-				.then((data) => {
-					let title = 'title';
-					if (data.success) {
-						title = data.content.title;
-					}
-					finalTasks.push({
-						...item,
-						metaName: info.title,
-						metaId: info.externalIds,
-						metaMemo: info.memo,
-						uri: _.isEmpty(type) ? '/_none/' : `/${ type }/`,
-						title
-					});
-				});
-			promises.push(promise);
+			return {
+				...item,
+				metaName: info.title,
+				metaId: info.externalIds,
+				metaMemo: info.memo,
+				uri: _.isEmpty(type) ? '/_none/' : `/${ type }/`
+			};
 		});
 
-		Promise.all(promises)
-			.then(() => {
-				const taskGroupList = _.groupBy(finalTasks, 'uri');
-				const projectApplyList = taskGroupList['/projectApply/'];
-				const graphApplyList = _.groupBy(taskGroupList['/graphApply/'], 'activityName');
-				this.setState({
-					projectApplyList,
-					graphApplyList,
-					loading: false
-				});
-			});
+		const taskGroupList = _.groupBy(finalTasks, 'uri');
+		const projectApplyList = taskGroupList['/projectApply/'];
+		const graphApplyList = _.groupBy(taskGroupList['/graphApply/'], 'activityName');
+		this.setState({
+			projectApplyList,
+			graphApplyList,
+			loading: false
+		});
 	}
 
 	render() {

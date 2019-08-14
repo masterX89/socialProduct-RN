@@ -76,7 +76,7 @@ export default class GraphApplyList extends React.PureComponent {
 					size={ 20 }
 					avatar={ this.props.user.avatar }
 				/>
-				<Text style={ { fontSize: 17 } }>{ item.title }/<Text style={ {
+				<Text style={ { fontSize: 17 } }>{ item.metaName }/<Text style={ {
 					color: '#00f'
 				} }>{ item.activityName }</Text></Text>
 			</WingBlank>
