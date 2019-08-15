@@ -2,14 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-
 import { Text } from 'react-native';
-
 // antd UI
 import { Tabs, Provider, Badge } from '@ant-design/react-native';
 import ProjectTab from '../component/nowTasks/ProjectTab';
 import GraphApplyTab from '../component/nowTasks/GraphApplyTab';
 import { FLOW_CORE_HOST } from '../../../constants/Constants';
+import { getFinalTasks } from '../utils/MyTaskUtils';
 
 @connect(state => ({
 	user: {
@@ -35,59 +34,9 @@ export default class TasksTab extends React.PureComponent {
 	}
 
 	async getMockData() {
-		// 获取当前activeSection的tasks
-		const tasksUrl = `${ FLOW_CORE_HOST }/flow/projectApply/tasks?assignee=${ this.props.user.name }(${ this.props.user.username })`;
-		const tasks = await fetch(tasksUrl, {
-			method: 'GET',
-			headers: {
-				'Auth-Token': this.props.user.token,
-				'Auth-uid': this.props.user.id
-			}
-		})
-			.then(data => data.json())
-			.then((data) => {
-				if (data.success) {
-					return data.content;
-				}
-				return [];
-			})
-			.catch(err => console.log(err));
-
-		// 查询流程ID对应的辅助流程信息，如标题，说明等
-		let url = `${ FLOW_CORE_HOST }/projectAndProcess/getHistoryByFlowIds?`;
-		_.each(tasks, (one) => {
-			url += `flowIds%5B%5D=${ one.processInstanceId }&`;
-		});
-		url = url.slice(0, url.length - 1);
-		const taskInfos = await fetch(url, {
-			method: 'GET',
-			headers: {
-				'Auth-Token': this.props.user.token,
-				'Auth-uid': this.props.user.id
-			}
-		})
-			.then(data => data.json())
-			.then((data) => {
-				if (data.success) {
-					return data.content;
-				}
-				return [];
-			})
-			.catch(err => console.log(err));
-
-		// 组合finalTasks
-		const finalTasks = _.map(tasks, (item) => {
-			const info = _.find(taskInfos, { processId: item.processInstanceId });
-			const type = item.processDefinitionId.split(':')[0];
-			return {
-				...item,
-				metaName: info.title,
-				metaId: info.externalIds,
-				metaMemo: info.memo,
-				uri: _.isEmpty(type) ? '/_none/' : `/${ type }/`
-			};
-		});
-
+		const url = `${ FLOW_CORE_HOST }/flow/projectApply/tasks?assignee=${ this.props.user.name }(${ this.props.user.username })`;
+		const { user } = this.props;
+		const finalTasks = await getFinalTasks(url, user);
 		const taskGroupList = _.groupBy(finalTasks, 'uri');
 		const projectApplyList = taskGroupList['/projectApply/'];
 		const graphApplyList = _.groupBy(taskGroupList['/graphApply/'], 'activityName');
