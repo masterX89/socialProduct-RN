@@ -10,6 +10,7 @@ import moment from 'moment';
 import Avatar from '../../../../containers/Avatar';
 import FinishTaskModal from './FinishTaskModal';
 import FlowPanel from '../../utils/FlowPanel';
+import { taskTemplate } from '../../utils/MyTaskUtils';
 
 const wingBlankTitleStyle = {
 	flexDirection: 'row',
@@ -45,17 +46,7 @@ export default class ProjectTab extends React.PureComponent {
 	};
 
 	state = {
-		projectTaskTemplate: [{
-			activityName: '项目申请审批'
-		}, {
-			activityName: '部门领导'
-		}, {
-			activityName: '知识管理'
-		}, {
-			activityName: 'IT管理'
-		}, {
-			activityName: '结束'
-		}]
+		projectTaskTemplate: taskTemplate.projectTaskTemplate
 	};
 
 	renderItem = ({ item }) => (

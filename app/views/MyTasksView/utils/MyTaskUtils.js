@@ -62,3 +62,40 @@ export async function getFinalTasks(url, user) {
 		loadingMore
 	};
 }
+
+export const taskTemplate = {
+	projectTaskTemplate: [{
+		activityName: '项目申请审批'
+	}, {
+		activityName: '部门领导'
+	}, {
+		activityName: '知识管理'
+	}, {
+		activityName: 'IT管理'
+	}, {
+		activityName: '结束'
+	}],
+	graphTaskTemplate: [{
+		activityName: '图纸申请审批'
+	}, {
+		activityName: '设计'
+	}, {
+		activityName: '校对'
+	}, {
+		activityName: '专业负责人'
+	}, {
+		activityName: '会签'
+	}, {
+		activityName: '审核'
+	}, {
+		activityName: '审定'
+	}, {
+		activityName: '设总'
+	}, {
+		activityName: '项目经理'
+	}, {
+		activityName: '档案审批人'
+	}, {
+		activityName: '结束'
+	}]
+};
