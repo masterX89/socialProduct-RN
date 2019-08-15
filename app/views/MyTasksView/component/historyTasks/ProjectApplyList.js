@@ -87,18 +87,20 @@ export default class ProjectApplyList extends React.PureComponent {
 	}
 
 	async getMockData(activeSection) {
-		if (this.state.loadingMore) {
+		const { user } = this.props;
+		const { loadingMore, pageSize, offset, nowTasks } = this.state;
+		if (loadingMore) {
 			// 获取当前activeSection的tasks
-			let url = `${ FLOW_CORE_HOST }/flow/projectApply/historyByAssigneeAndActivityNameList?assignee=${ this.props.user.name }(${ this.props.user.username })`;
+			let url = `${ FLOW_CORE_HOST }/flow/projectApply/historyByAssigneeAndActivityNameList?assignee=${ user.name }(${ user.username })`;
 			url += `&activityNameListString=${ activeSection }`;
-			url += `&pageSize=${ this.state.pageSize }`;
-			url += `&pageNum=${ this.state.offset }`;
-			const { user } = this.props;
-			const finalTasks = await getFinalTasks(url, user);
+			url += `&pageSize=${ pageSize }`;
+			url += `&pageNum=${ offset }`;
+			const { finalTasks, loadingMore } = await getFinalTasks(url, user);
 			this.setState({
-				nowTasks: this.state.nowTasks.concat(finalTasks),
-				offset: this.state.pageSize + this.state.offset,
-				loading: false
+				nowTasks: nowTasks.concat(finalTasks),
+				offset: pageSize + offset,
+				loading: false,
+				loadingMore
 			});
 		}
 	}

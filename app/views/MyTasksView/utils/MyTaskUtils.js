@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { FLOW_CORE_HOST } from '../../../constants/Constants';
 
 export async function getFinalTasks(url, user) {
+	let loadingMore = true;
 	const tasks = await fetch(url, {
 		method: 'GET',
 		headers: {
@@ -12,6 +13,9 @@ export async function getFinalTasks(url, user) {
 		.then(data => data.json())
 		.then((data) => {
 			if (data.success) {
+				if (data.content.length === 0) {
+					loadingMore = false;
+				}
 				return data.content;
 			}
 			return [];
@@ -41,7 +45,7 @@ export async function getFinalTasks(url, user) {
 		.catch(err => console.log(err));
 
 	// 组合finalTasks
-	return _.map(tasks, (item) => {
+	const finalTasks = _.map(tasks, (item) => {
 		const info = _.find(taskInfos, { processId: item.processInstanceId });
 		const type = item.processDefinitionId.split(':')[0];
 		return {
@@ -49,7 +53,12 @@ export async function getFinalTasks(url, user) {
 			metaName: info.title,
 			metaId: info.externalIds,
 			metaMemo: info.memo,
-			uri: _.isEmpty(type) ? '/_none/' : `/${ type }/`
+			uri: _.isEmpty(type) ? '/_none/' : `/${ type }/`,
+			flowStatus: info.flowStatus
 		};
 	});
+	return {
+		finalTasks,
+		loadingMore
+	};
 }

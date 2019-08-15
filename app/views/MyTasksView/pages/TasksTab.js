@@ -34,9 +34,9 @@ export default class TasksTab extends React.PureComponent {
 	}
 
 	async getMockData() {
-		const url = `${ FLOW_CORE_HOST }/flow/projectApply/tasks?assignee=${ this.props.user.name }(${ this.props.user.username })`;
 		const { user } = this.props;
-		const finalTasks = await getFinalTasks(url, user);
+		const url = `${ FLOW_CORE_HOST }/flow/projectApply/tasks?assignee=${ user.name }(${ user.username })`;
+		const { finalTasks } = await getFinalTasks(url, user);
 		const taskGroupList = _.groupBy(finalTasks, 'uri');
 		const projectApplyList = taskGroupList['/projectApply/'];
 		const graphApplyList = _.groupBy(taskGroupList['/graphApply/'], 'activityName');
