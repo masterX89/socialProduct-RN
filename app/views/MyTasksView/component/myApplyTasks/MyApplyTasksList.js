@@ -108,7 +108,8 @@ export default class MyApplyTasksList extends React.PureComponent {
 					...item,
 					metaName: info.title,
 					metaId: info.externalIds,
-					metaMemo: info.memo
+					metaMemo: info.memo,
+					flowStatus: info.flowStatus
 				};
 			});
 			this.setState({
@@ -146,6 +147,12 @@ export default class MyApplyTasksList extends React.PureComponent {
 							<WingBlank style={ { ...wingBlankButtonStyle } }>
 								<Text style={ { color: '#808080' } }>{ moment(new Date(item.endTime))
 									.format('YYYY-MM-DD HH:mm') }</Text>
+								{ item.flowStatus === '已拒绝' ? (<Text style={ {
+									color: '#f00'
+								} }>{ item.flowStatus }</Text>) : (<Text style={ {
+									color: '#3E8EE1'
+								} }>{ item.flowStatus }</Text>) }
+
 							</WingBlank>
 						</List.Item>
 					) }
