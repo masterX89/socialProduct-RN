@@ -90,7 +90,7 @@ export default class RoomFilesView extends LoggedView {
 		return (
 			<Provider>
 				{ loading ? (loadingView) : (
-					files.length > 0 ? (
+					(files && files.length > 0) ? (
 						<FlatList
 							data={ files }
 							renderItem={ this.renderItem }
