@@ -6,7 +6,7 @@ import { Text, View } from 'react-native';
 // antd UI
 import { List, WingBlank } from '@ant-design/react-native';
 import { Base64 } from 'js-base64';
-import ImageFilePreview from './ImageFilePreview';
+import FilePreview from './FilePreview';
 import FileDelete from './FileDelete';
 import { fileOpt } from '../../../lib/methods/FileUtils';
 
@@ -27,7 +27,7 @@ export default class FileItem extends React.PureComponent {
 						size='sm'
 						style={ { ...wingBlankButtonStyle } }
 					>
-						<ImageFilePreview file={ file }/>
+						<FilePreview file={ file }/>
 						<FileDelete fileId={ file.fileId } { ...this.props }/>
 					</WingBlank>
 

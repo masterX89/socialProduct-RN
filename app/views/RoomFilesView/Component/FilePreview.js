@@ -8,7 +8,7 @@ import { Dimensions, View, WebView } from 'react-native';
 import { Modal, Button } from '@ant-design/react-native';
 import { getFilePreviewUrl, fileOpt } from '../../../lib/methods/FileUtils';
 
-export default class ImageFilePreview extends React.PureComponent {
+export default class FilePreview extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -33,7 +33,7 @@ export default class ImageFilePreview extends React.PureComponent {
 		return (
 			<View>
 				<Button size='small' type='ghost'
-				        disabled={ !(fileOpt.isImageFilePattern.test(fileOpt.isBase64CodePattern.test(name) ? Base64.decode(name) : name)) }
+				        disabled={ !((fileOpt.isImageFilePattern.test(fileOpt.isBase64CodePattern.test(name) ? Base64.decode(name) : name)) || (fileOpt.pdfTypePattern.test(fileOpt.isBase64CodePattern.test(name) ? Base64.decode(name) : name))) }
 				        onPress={ this.handleOpen }>预览</Button>
 				<Modal
 					transparent
@@ -56,7 +56,7 @@ export default class ImageFilePreview extends React.PureComponent {
 	}
 }
 
-ImageFilePreview.propTypes = {
+FilePreview.propTypes = {
 	file: PropTypes.object.isRequired
 };
 
