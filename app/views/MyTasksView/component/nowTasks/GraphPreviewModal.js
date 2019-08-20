@@ -96,7 +96,7 @@ export default class GraphPreviewModal extends React.PureComponent {
 						source={ { uri: currentGraphPreviewUrl } }
 						style={ {
 							width: '100%',
-							height: 600
+							height: height * 0.82
 						} }
 						renderLoading={ () => {
 							return (<View style={ styles.Container }>
