@@ -18,24 +18,75 @@ export const fileOpt = {
 	isBase64CodePattern: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
 };
 
-export function uploadImageFile(file, user, rid) {
-	let uploadFile = { type: file.mime };
+export const extensionToMime = {
+	dwg: 'application/acad',
+	exe: 'application/octet-stream',
+	doc: 'application/vnd.ms-word',
+	xls: 'application/vnd.ms-excel',
+	ppt: 'application/vnd.ms-powerpoint',
+	pdf: 'application/pdf',
+	xml: 'application/xml',
+	gz: 'application/x-gzip',
+	tgz: 'application/x-gzip',
+	bz: 'application/x-bzip2',
+	bz2: 'application/x-bzip2',
+	tbz: 'application/x-bzip2',
+	zip: 'application/zip',
+	rar: 'application/x-rar',
+	tar: 'application/x-tar',
+	'7z': 'application/x-7z-compressed',
+	txt: 'text/plain',
+	php: 'text/x-php',
+	html: 'text/html',
+	htm: 'text/html',
+	js: 'text/javascript',
+	css: 'text/css',
+	sh: 'text/x-shellscript',
+	sql: 'text/x-sql',
+	bmp: 'image/x-ms-bmp',
+	jpg: 'image/jpeg',
+	jpeg: 'image/jpeg',
+	gif: 'image/gif',
+	png: 'image/png',
+	tif: 'image/tiff',
+	tiff: 'image/tiff',
+	tga: 'image/x-targa',
+	psd: 'image/vnd.adobe.photoshop',
+	mp3: 'audio/mpeg',
+	mid: 'audio/midi',
+	ogg: 'audio/ogg',
+	mp4a: 'audio/mp4',
+	wav: 'audio/wav',
+	wma: 'audio/x-ms-wma',
+	avi: 'video/x-msvideo',
+	dv: 'video/x-dv',
+	mp4: 'video/mp4',
+	mpeg: 'video/mpeg',
+	mpg: 'video/mpeg',
+	mov: 'video/quicktime',
+	wm: 'video/x-ms-wmv',
+	flv: 'video/x-flv',
+	mkv: 'video/x-matroska'
+};
+
+export function uploadFile(file, user, rid) {
+	let willUploadFile = { type: file.mime };
 	if (Platform.OS === 'android') {
-		uploadFile = {
-			...uploadFile,
+		willUploadFile = {
+			...willUploadFile,
 			uri: file.path,
 			name: Base64.encode(file.name.split('.')[file.name.split('.').length - 1] === file.mime.split('/')[file.mime.split('/').length - 1] ? file.name : `${ file.name }.${ file.mime.split('/')[file.mime.split('/').length - 1] }`)
 		};
 	} else if (Platform.OS === 'ios') {
-		uploadFile = {
-			...uploadFile,
+		willUploadFile = {
+			...willUploadFile,
 			uri: file.sourceURL,
 			name: file.name
 		};
 	}
 	const formData = new FormData();
-	formData.append('file', uploadFile);
-	formData.append('fileName', uploadFile.name);
+	formData.append('file', willUploadFile);
+	formData.append('fileName', willUploadFile.name);
 	formData.append('groupId', rid);
 
 	return fetch(`${ TEAM_CORE_HOST }/fileManager/uploadGroupFile`, {

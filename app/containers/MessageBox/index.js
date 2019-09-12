@@ -7,7 +7,7 @@ import { emojify } from 'react-emojione';
 import { KeyboardAccessoryView } from 'react-native-keyboard-input';
 import ImagePicker from 'react-native-image-crop-picker';
 // Myutils
-import { uploadImageFile } from '../../lib/methods/FileUtils';
+import { uploadFile } from '../../lib/methods/FileUtils';
 
 import { userTyping } from '../../actions/room';
 import RocketChat from '../../lib/rocketchat';
@@ -214,7 +214,7 @@ export default class MessageBox extends React.PureComponent {
 	sendImageMessage = async(file) => {
 		this.setState({ file: { isVisible: false } });
 		try {
-			uploadImageFile(file, this.props.user, this.props.rid)
+			uploadFile(file, this.props.user, this.props.rid)
 				.then((res) => {
 					if (res.success) {
 						RocketChat.sendMessage(this.props.rid, `文件已上传：${ file.name }(${ res.content })`)

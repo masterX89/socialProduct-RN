@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 // react-native UI
 import { Text, View } from 'react-native';
 // antd UI
-import { List, WingBlank } from '@ant-design/react-native';
+import { List, WingBlank, Button } from '@ant-design/react-native';
 import { Base64 } from 'js-base64';
 import FilePreview from './FilePreview';
 import FileDelete from './FileDelete';
 import { fileOpt } from '../../../lib/methods/FileUtils';
+import FileForward from './FileForward';
 
 const wingBlankButtonStyle = {
 	flexDirection: 'row',
@@ -28,6 +29,7 @@ export default class FileItem extends React.PureComponent {
 						style={ { ...wingBlankButtonStyle } }
 					>
 						<FilePreview file={ file }/>
+						<FileForward file={ file }/>
 						<FileDelete fileId={ file.fileId } { ...this.props }/>
 					</WingBlank>
 

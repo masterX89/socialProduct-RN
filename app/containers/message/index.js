@@ -252,7 +252,9 @@ export default class Message extends React.Component {
 		return this.props.item.attachments.map((file) => {
 			const { user } = this.props;
 			if (file.image_url) {
-				return <Image file={file} user={user} />;
+				// TODO: 统一格式后修改
+				// return <Image file={file} user={user} />;
+				return null;
 			}
 			if (file.audio_url) {
 				return <Audio file={file} user={user} />;

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>RocketChatRN.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>armv7</string>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>5D8D4F294759DE341EB77D28F9A7BEC8EB0CE33E</string>
+				<key>dateExpires</key>
+				<string>2020/7/11</string>
+				<key>type</key>
+				<string>iOS Distribution</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>7ZW2KAF3H4.com.socialproduct.arcplus-99</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>7ZW2KAF3H4</string>
+				<key>get-task-allow</key>
+				<false/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>7ZW2KAF3H4.com.socialproduct.arcplus-99</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>RocketChatRN.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>6e3f87d7-2927-4f0c-97c9-f36510179fc2</string>
+				<key>name</key>
+				<string>iOS Team Ad Hoc Provisioning Profile: com.socialproduct.arcplus-99</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>7ZW2KAF3H4</string>
+				<key>name</key>
+				<string>Hankai Xia</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
